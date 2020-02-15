@@ -12,11 +12,11 @@ Imports System.Windows
 '查看程序集特性的值
 
 <Assembly: AssemblyTitle("窗口调节器")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyDescription("RGSS 窗口调节器")>
+<Assembly: AssemblyCompany("Nukepayload2")>
 <Assembly: AssemblyProduct("窗口调节器")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyCopyright("Copyright Nukepayload2 2020")>
+<Assembly: AssemblyTrademark("Nukepayload2")>
 <Assembly: ComVisible(false)>
 
 '若要开始生成可本地化的应用程序，请设置
@@ -55,5 +55,5 @@ Imports System.Windows
 '通过使用 "*"，如下所示:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.1.0.0")>
+<Assembly: AssemblyFileVersion("1.1.0.0")>

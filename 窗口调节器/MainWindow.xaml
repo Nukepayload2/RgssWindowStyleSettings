@@ -8,7 +8,7 @@
         UseLayoutRounding="True" AngleWidth="12"
         MinWidth="250" MinHeight="250" BorderBrush="DodgerBlue" BorderThickness="1"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
-        Title="夜弦之音窗口调节器" Height="450" Width="400">
+        Title="RGSS 窗口调节器" Height="450" Width="400">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -44,30 +44,59 @@
         <Grid x:Name="TitleBar">
             <Rectangle x:Name="TitleBarDragElement" Fill="#01FFFFFF"/>
             <TextBlock Margin="8" IsHitTestVisible="False" Text="{Binding ElementName=ThisWindow, Path=Title}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,48,0" VerticalAlignment="Top">
+                <Button x:Name="BtnViewSource"
+                    Background="#3F7F7F7F" BorderThickness="0"
+                    Padding="18,4" Margin="0,0,4,0">源代码</Button>
+                <Button x:Name="BtnAbout"
+                    Background="#3F7F7F7F" BorderThickness="0"
+                    Padding="18,4">关于</Button>
+            </StackPanel>
+
             <Button Click="BtnClose_Click" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
         </Grid>
         <Border Grid.Row="1" x:Name="ClientArea">
-            <Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="6">
-                    <TextBlock FontSize="20">游戏窗口设置</TextBlock>
-                    <local:FluentControlChrome Margin="0,8">
-                        <local:ToggleSwitch x:Name="ChkCanResize">窗口大小可变</local:ToggleSwitch>
+                    <local:FluentControlChrome>
+                        <Expander x:Name="ExpBasicSettings" Header="游戏窗口设置" Margin="4">
+                            <StackPanel>
+                                <local:FluentControlChrome Margin="0,8">
+                                    <local:ToggleSwitch x:Name="ChkCanResize">窗口大小可变</local:ToggleSwitch>
+                                </local:FluentControlChrome>
+                                <local:FluentControlChrome Margin="0,8">
+                                    <local:ToggleSwitch x:Name="ChkCanMaximize">窗口可以最大化</local:ToggleSwitch>
+                                </local:FluentControlChrome>
+                                <TextBlock x:Name="TblStatus"></TextBlock>
+                                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                            Orientation="Horizontal" Margin="16,12">
+                                    <local:FluentControlChrome Margin="8">
+                                        <Button x:Name="BtnResizable">应用</Button>
+                                    </local:FluentControlChrome>
+                                    <local:FluentControlChrome Margin="8">
+                                        <Button x:Name="BtnDetect">检测</Button>
+                                    </local:FluentControlChrome>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
                     </local:FluentControlChrome>
-                    <local:FluentControlChrome Margin="0,8">
-                        <local:ToggleSwitch x:Name="ChkCanMaximize">窗口可以最大化</local:ToggleSwitch>
+                    <local:FluentControlChrome Margin="0,8,0,0">
+                        <Expander x:Name="ExpAdvancedSettings" Header="进阶设置" Margin="4">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">游戏窗口名称格式</TextBlock>
+                                <TextBox x:Name="TxtWindowNameFormat" Margin="2" FontSize="14">夜弦之音 ver#.##</TextBox>
+                                <TextBlock FontWeight="Bold">格式说明</TextBlock>
+                                <TextBlock TextWrapping="Wrap">* 任意数量字符<LineBreak/>
+                                    ? 一个字符<LineBreak/>
+                                    # 一个 0~9 的数字<LineBreak/>
+                                    [字符字符] 字符列表中的任意一个字符。使用连字符（–）来分隔范围的下限和上限，例如[A-Z]。<LineBreak/>
+                                    [!字符字符] 不在字符列表中的任意一个字符
+                                </TextBlock>
+                            </StackPanel>
+                        </Expander>
                     </local:FluentControlChrome>
-                    <TextBlock x:Name="TblStatus"></TextBlock>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                            Orientation="Horizontal" Margin="16,12">
-                    <local:FluentControlChrome Margin="8">
-                        <Button x:Name="BtnResizable">应用</Button>
-                    </local:FluentControlChrome>
-                    <local:FluentControlChrome Margin="8">
-                        <Button x:Name="BtnDetect">检测</Button>
-                    </local:FluentControlChrome>
-                </StackPanel>
-            </Grid>
+            </ScrollViewer>
         </Border>
     </Grid>
 </ext:BorderlessWindow>
