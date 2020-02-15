@@ -82,8 +82,8 @@
                     </local:FluentControlChrome>
                     <local:FluentControlChrome Margin="0,8,0,0">
                         <Expander x:Name="ExpAdvancedSettings" Header="进阶设置" Margin="4">
-                            <StackPanel>
-                                <TextBlock FontWeight="Bold">游戏窗口名称格式</TextBlock>
+                            <StackPanel Margin="0,4">
+                                <TextBlock FontWeight="Bold" FontSize="16">游戏窗口名称格式</TextBlock>
                                 <TextBox x:Name="TxtWindowNameFormat" Margin="2" FontSize="14">夜弦之音 ver#.##</TextBox>
                                 <TextBlock FontWeight="Bold">格式说明</TextBlock>
                                 <TextBlock TextWrapping="Wrap">* 任意数量字符<LineBreak/>
@@ -92,6 +92,9 @@
                                     [字符字符] 字符列表中的任意一个字符。使用连字符（–）来分隔范围的下限和上限，例如[A-Z]。<LineBreak/>
                                     [!字符字符] 不在字符列表中的任意一个字符
                                 </TextBlock>
+                                <local:FluentControlChrome Margin="8" HorizontalAlignment="Right">
+                                    <Button x:Name="BtnHelpTitleFormat">查看此功能的在线帮助</Button>
+                                </local:FluentControlChrome>
                             </StackPanel>
                         </Expander>
                     </local:FluentControlChrome>
