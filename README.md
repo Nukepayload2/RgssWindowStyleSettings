@@ -21,3 +21,6 @@ https://gitee.com/nukepayload2/RgssWindowStyleMgrDocs/releases
 推荐:
 - .NET Framework 4.7.2 或更高
 - 最新稳定版的 Windows 10
+
+### 附加许可条款
+此软件禁止用于商业用途。
