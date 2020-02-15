@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.InteropServices
+﻿Option Compare Text
+Imports System.Runtime.InteropServices
 
 Public Class RgssWindow
     Private ReadOnly _handle As IntPtr
