@@ -89,8 +89,8 @@
                                 <TextBlock TextWrapping="Wrap">* 任意数量字符<LineBreak/>
                                     ? 一个字符<LineBreak/>
                                     # 一个 0~9 的数字<LineBreak/>
-                                    [字符字符] 字符列表中的任意一个字符。使用连字符（–）来分隔范围的下限和上限，例如[A-Z]。<LineBreak/>
-                                    [!字符字符] 不在字符列表中的任意一个字符
+                                    [字符列表] 字符列表中的任意一个字符。使用连字符（–）来分隔范围的下限和上限，例如[A-Z]。<LineBreak/>
+                                    [!字符列表] 不在字符列表中的任意一个字符
                                 </TextBlock>
                                 <local:FluentControlChrome Margin="8" HorizontalAlignment="Right">
                                     <Button x:Name="BtnHelpTitleFormat">查看此功能的在线帮助</Button>
