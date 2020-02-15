@@ -23,7 +23,7 @@ Class MainWindow
     Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         TxtWindowNameFormat.Text = Application.Settings.WindowPattern
         ExpBasicSettings.IsExpanded = True
-        DetectGameWindow(silent:=False)
+        DetectGameWindow(silent:=True)
     End Sub
 
     Private Sub DetectGameWindow(silent As Boolean)
@@ -54,7 +54,8 @@ Class MainWindow
     Private Sub BtnAbout_Click(sender As Object, e As RoutedEventArgs) Handles BtnAbout.Click
         Dim version = GetType(MainWindow).Assembly.GetCustomAttribute(Of AssemblyFileVersionAttribute)?.Version
         MsgBox($"版本: {version}
-作者: Nukepayload2", MsgBoxStyle.Information, "关于 " & Title)
+作者: Nukepayload2
+禁止用于商业用途。如发此软件被贩卖，请举报店铺。", MsgBoxStyle.Information, "关于 " & Title)
     End Sub
 
     Private Async Sub ExpBasicSettings_Expanded(sender As Object, e As RoutedEventArgs) Handles ExpBasicSettings.Expanded
@@ -81,5 +82,9 @@ Class MainWindow
 
     Private Sub BtnHelpTitleFormat_Click(sender As Object, e As RoutedEventArgs) Handles BtnHelpTitleFormat.Click
         Process.Start("explorer", "https://gitee.com/nukepayload2/RgssWindowStyleMgrDocs/blob/master/%E7%AA%97%E5%8F%A3%E5%90%8D%E7%A7%B0%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E.md")
+    End Sub
+
+    Private Sub BtnViewReleases_Click(sender As Object, e As RoutedEventArgs) Handles BtnViewReleases.Click
+        Process.Start("explorer", "https://gitee.com/nukepayload2/RgssWindowStyleMgrDocs/releases")
     End Sub
 End Class

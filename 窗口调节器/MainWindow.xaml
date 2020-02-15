@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:窗口调节器" x:Name="ThisWindow" ResizeThickness="4"
         mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" 
         UseLayoutRounding="True" AngleWidth="12"
-        MinWidth="250" MinHeight="250" BorderBrush="DodgerBlue" BorderThickness="1"
+        MinWidth="400" MinHeight="350" BorderBrush="DodgerBlue" BorderThickness="1"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
         Title="RGSS 窗口调节器" Height="450" Width="400">
     <Window.Resources>
@@ -45,9 +45,12 @@
             <Rectangle x:Name="TitleBarDragElement" Fill="#01FFFFFF"/>
             <TextBlock Margin="8" IsHitTestVisible="False" Text="{Binding ElementName=ThisWindow, Path=Title}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,48,0" VerticalAlignment="Top">
+                <Button x:Name="BtnViewReleases"
+                    Background="#3F7F7F7F" BorderThickness="0"
+                    Padding="18,4" Margin="0,0,4,0">发行版...</Button>
                 <Button x:Name="BtnViewSource"
                     Background="#3F7F7F7F" BorderThickness="0"
-                    Padding="18,4" Margin="0,0,4,0">源代码</Button>
+                    Padding="18,4" Margin="0,0,4,0">源代码...</Button>
                 <Button x:Name="BtnAbout"
                     Background="#3F7F7F7F" BorderThickness="0"
                     Padding="18,4">关于</Button>
