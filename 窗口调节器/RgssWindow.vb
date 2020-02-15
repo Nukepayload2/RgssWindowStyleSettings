@@ -36,7 +36,7 @@ Public Class RgssWindow
 
     Public Function TryDetectWindowStyle() As RgssWindowStyle
         Dim wndStyle = GetWindowLong(_handle, GWL_STYLE).ToInt64
-        If Marshal.GetLastWin32Error <> 0 Then
+        If wndStyle = 0 AndAlso Marshal.GetLastWin32Error <> 0 Then
             Return Nothing
         End If
         Dim canResize = HasFlag(wndStyle, WS_THICKFRAME)
@@ -46,7 +46,7 @@ Public Class RgssWindow
 
     Public Function TryApplyWindowStyle(style As RgssWindowStyle) As Boolean
         Dim wndStyle = GetWindowLong(_handle, GWL_STYLE).ToInt64
-        If Marshal.GetLastWin32Error <> 0 Then
+        If wndStyle = 0 AndAlso Marshal.GetLastWin32Error <> 0 Then
             Return False
         End If
         Dim newStyle = wndStyle

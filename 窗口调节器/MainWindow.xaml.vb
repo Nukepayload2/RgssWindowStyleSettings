@@ -23,7 +23,7 @@ Class MainWindow
     Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         TxtWindowNameFormat.Text = Application.Settings.WindowPattern
         ExpBasicSettings.IsExpanded = True
-        DetectGameWindow(silent:=True)
+        DetectGameWindow(silent:=False)
     End Sub
 
     Private Sub DetectGameWindow(silent As Boolean)
