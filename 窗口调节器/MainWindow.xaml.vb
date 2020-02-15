@@ -53,15 +53,22 @@ Class MainWindow
 
     Private Sub BtnAbout_Click(sender As Object, e As RoutedEventArgs) Handles BtnAbout.Click
         Dim version = GetType(MainWindow).Assembly.GetCustomAttribute(Of AssemblyFileVersionAttribute)?.Version
-        MsgBox("版本: " & version, MsgBoxStyle.Information, "关于 " & Title)
+        MsgBox($"版本: {version}
+作者: Nukepayload2", MsgBoxStyle.Information, "关于 " & Title)
     End Sub
 
-    Private Sub ExpBasicSettings_Expanded(sender As Object, e As RoutedEventArgs) Handles ExpBasicSettings.Expanded
+    Private Async Sub ExpBasicSettings_Expanded(sender As Object, e As RoutedEventArgs) Handles ExpBasicSettings.Expanded
+        ContentScroll.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled
         ExpAdvancedSettings.IsExpanded = False
+        Await Task.Delay(100)
+        ContentScroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto
     End Sub
 
-    Private Sub ExpAdvancedSettings_Expanded(sender As Object, e As RoutedEventArgs) Handles ExpAdvancedSettings.Expanded
+    Private Async Sub ExpAdvancedSettings_Expanded(sender As Object, e As RoutedEventArgs) Handles ExpAdvancedSettings.Expanded
+        ContentScroll.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled
         ExpBasicSettings.IsExpanded = False
+        Await Task.Delay(100)
+        ContentScroll.VerticalScrollBarVisibility = ScrollBarVisibility.Auto
     End Sub
 
     Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

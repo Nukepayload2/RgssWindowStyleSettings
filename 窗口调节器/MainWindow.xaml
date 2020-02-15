@@ -56,7 +56,7 @@
             <Button Click="BtnClose_Click" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
         </Grid>
         <Border Grid.Row="1" x:Name="ClientArea">
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="ContentScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="6">
                     <local:FluentControlChrome>
                         <Expander x:Name="ExpBasicSettings" Header="游戏窗口设置" Margin="4">
