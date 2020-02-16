@@ -84,6 +84,15 @@
                         </Expander>
                     </local:FluentControlChrome>
                     <local:FluentControlChrome Margin="0,8,0,0">
+                        <Expander x:Name="ExpKeyboardSettings" Header="按键映射和按键宏" Margin="4">
+                            <StackPanel Margin="0,4">
+                                <local:FluentControlChrome Margin="0,8">
+                                    <local:ToggleSwitch x:Name="ChkUseWasd">将 WASD 映射到 ↑→↓←</local:ToggleSwitch>
+                                </local:FluentControlChrome>
+                            </StackPanel>
+                        </Expander>
+                    </local:FluentControlChrome>
+                    <local:FluentControlChrome Margin="0,8,0,0">
                         <Expander x:Name="ExpAdvancedSettings" Header="进阶设置" Margin="4">
                             <StackPanel Margin="0,4">
                                 <TextBlock FontWeight="Bold" FontSize="16">游戏窗口名称格式</TextBlock>
