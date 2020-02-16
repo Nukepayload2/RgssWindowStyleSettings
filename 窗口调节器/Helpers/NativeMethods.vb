@@ -36,12 +36,22 @@ Module NativeMethods
     Declare Unicode Function SendMessage Lib "user32" Alias "SendMessageW" (
         hWnd As IntPtr, Msg As Integer, wParam As IntPtr,
         <MarshalAs(UnmanagedType.LPWStr)> lParam As String) As IntPtr
-End Module
 
-Module NativeConstants
-    Public Const WM_GETTEXTLENGTH = &HE
-    Public Const WM_GETTEXT = &HD
-    Public Const GWL_STYLE = -16
-    Public Const WS_THICKFRAME = &H40000
-    Public Const WS_MAXIMIZEBOX = &H10000
+    Declare Function GetWindowThreadProcessId Lib "user32" (
+        hwnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
+
+    Declare Function AttachThreadInput Lib "user32" (
+        idAttach As Integer, idAttachTo As Integer, fAttach As Integer) As Integer
+
+    Declare Function SetForegroundWindow Lib "user32" (
+        hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+
+    Declare Function SetFocus Lib "user32" (
+        hwnd As IntPtr) As IntPtr
+
+    Declare Function GetForegroundWindow Lib "user32" () As IntPtr
+
+    Declare Function IsWindow Lib "user32" (
+        hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+
 End Module

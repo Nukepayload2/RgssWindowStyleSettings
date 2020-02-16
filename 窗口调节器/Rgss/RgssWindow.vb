@@ -3,6 +3,21 @@ Imports System.Runtime.InteropServices
 
 Public Class RgssWindow
     Private ReadOnly _handle As IntPtr
+    Public ReadOnly Property IsAlive As Boolean
+        Get
+            Return IsWindow(_handle)
+        End Get
+    End Property
+
+    Public ReadOnly Property IsForeground As Boolean
+        Get
+            Dim inputFocus = GetForegroundWindow
+            If inputFocus = Nothing Then
+                Return False
+            End If
+            Return inputFocus = _handle
+        End Get
+    End Property
 
     Sub New(handle As IntPtr)
         _handle = handle
@@ -25,6 +40,30 @@ Public Class RgssWindow
         SendMessage(hWnd, WM_GETTEXT, length + 1, title)
         Return title
     End Function
+
+    Public Sub Activate()
+        ActivateInternal(_handle)
+    End Sub
+
+    Private Shared Sub ActivateInternal(hwndApp As IntPtr)
+
+        ' SetActiveWindow on Win32 only activates the Window - it does
+        ' not bring to to the foreground unless the window belongs to
+        ' the current thread.  NativeMethods.SetForegroundWindow() activates the
+        ' window, moves it to the foreground, and bumps the priority
+        ' of the thread which owns the window.
+
+        Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
+
+        ' Attach ourselves to the window we want to set focus to
+        AttachThreadInput(0, GetWindowThreadProcessId(hwndApp, dwDummy), 1)
+        ' Make it foreground and give it focus, this will occur
+        ' synchronously because we are attached.
+        SetForegroundWindow(hwndApp)
+        SetFocus(hwndApp)
+        ' Unattach ourselves from the window
+        AttachThreadInput(0, GetWindowThreadProcessId(hwndApp, dwDummy), 0)
+    End Sub
 
     Public Shared Function TryFindGameWindow(wildcard As String) As RgssWindow
         Dim hwnd = FindGameWindowHandle(wildcard)

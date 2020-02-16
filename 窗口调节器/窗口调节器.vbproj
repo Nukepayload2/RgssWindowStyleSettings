@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\NativeConstants.vb" />
     <Compile Include="Views\MainWindow.AdvancedSettings.vb" />
     <Compile Include="Views\MainWindow.Expanders.vb" />
     <Compile Include="Views\MainWindow.KeyboardSettings.vb" />
@@ -159,6 +160,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Nukepayload2.Diagnostics.InputInjection">
+      <Version>1.2.1-rc6</Version>
+    </PackageReference>
     <PackageReference Include="Nukepayload2.UI.WPFBorderlessWindow">
       <Version>1.3.2</Version>
     </PackageReference>

@@ -1,9 +1,8 @@
 ﻿Partial Class MainWindow
     Private Sub BtnResizable_Click(sender As Object, e As RoutedEventArgs) Handles BtnResizable.Click
         TblStatus.Text = String.Empty
-        Dim gameWnd = RgssWindow.TryFindGameWindow(TxtWindowNameFormat.Text)
+        Dim gameWnd = GetGameWindow()
         If gameWnd Is Nothing Then
-            MsgBox("找不到游戏窗口。", vbExclamation, "错误")
             Return
         End If
         Dim wndStyle As New RgssWindowStyle(ChkCanResize.IsChecked, ChkCanMaximize.IsChecked)
@@ -19,9 +18,8 @@
 
     Private Sub DetectGameWindow(silent As Boolean)
         TblStatus.Text = String.Empty
-        Dim gameWnd = RgssWindow.TryFindGameWindow(TxtWindowNameFormat.Text)
+        Dim gameWnd = GetGameWindow(silent)
         If gameWnd Is Nothing Then
-            If Not silent Then MsgBox("找不到游戏窗口。", vbExclamation, "错误")
             Return
         End If
         Dim detectResult = gameWnd.TryDetectWindowStyle
