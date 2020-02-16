@@ -159,10 +159,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\WPF_Borderless_Window\Nukepayload2.UI.Win32\Nukepayload2.UI.Win32.vbproj">
-      <Project>{368e31a5-8d86-41ce-90cc-8d4b09f87439}</Project>
-      <Name>Nukepayload2.UI.Win32</Name>
-    </ProjectReference>
+    <PackageReference Include="Nukepayload2.UI.WPFBorderlessWindow">
+      <Version>1.3.2</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
