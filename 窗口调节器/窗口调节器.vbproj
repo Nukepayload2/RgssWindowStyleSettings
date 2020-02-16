@@ -71,6 +71,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Views\MainWindow.AdvancedSettings.vb" />
+    <Compile Include="Views\MainWindow.Expanders.vb" />
+    <Compile Include="Views\MainWindow.KeyboardSettings.vb" />
     <Compile Include="Views\MainWindow.TitleBar.vb" />
     <Compile Include="Views\MainWindow.WindowStyleControl.vb" />
     <Compile Include="Models\SettingsModel.vb" />

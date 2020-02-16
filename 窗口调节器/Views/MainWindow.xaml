@@ -86,16 +86,26 @@
                     <local:FluentControlChrome Margin="0,8,0,0">
                         <Expander x:Name="ExpKeyboardSettings" Header="按键映射和按键宏" Margin="4">
                             <StackPanel Margin="0,4">
+                                <TextBlock FontSize="16">按键映射</TextBlock>
+                                <TextBlock TextWrapping="Wrap" Foreground="DarkRed">
+                                    注意：此功能容易被杀毒软件当作病毒处理，导致此软件以及系统发生文件被杀毒软件删除或修改的问题。
+                                    使用之前需确保使用误报率低的杀毒软件，例如 Windows Defender。尤其是不要使用 360 和腾讯电脑管家。
+                                </TextBlock>
+                                <TextBlock TextWrapping="Wrap">
+                                    隐私声明：此功能收集您的键盘输入，用于确定何时映射到哪一个按键。
+                                    此信息在退出此软件后消失，不会发送给任何其它地方，也不会记录到本地文件。
+                                </TextBlock>
                                 <local:FluentControlChrome Margin="0,8">
                                     <local:ToggleSwitch x:Name="ChkUseWasd">将 WASD 映射到 ↑→↓←</local:ToggleSwitch>
                                 </local:FluentControlChrome>
+                                <TextBlock FontSize="16">按键宏</TextBlock>
                             </StackPanel>
                         </Expander>
                     </local:FluentControlChrome>
                     <local:FluentControlChrome Margin="0,8,0,0">
                         <Expander x:Name="ExpAdvancedSettings" Header="进阶设置" Margin="4">
                             <StackPanel Margin="0,4">
-                                <TextBlock FontWeight="Bold" FontSize="16">游戏窗口名称格式</TextBlock>
+                                <TextBlock FontSize="16">游戏窗口名称格式</TextBlock>
                                 <TextBox x:Name="TxtWindowNameFormat" Margin="2" FontSize="14">夜弦之音 ver#.##</TextBox>
                                 <TextBlock FontWeight="Bold">格式说明</TextBlock>
                                 <TextBlock TextWrapping="Wrap">* 任意数量字符<LineBreak/>
