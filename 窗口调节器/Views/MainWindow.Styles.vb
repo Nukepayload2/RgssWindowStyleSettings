@@ -1,7 +1,5 @@
 ﻿Imports Nukepayload2.UI.Win32
 
-<Assembly: DisableDpiAwareness>
-
 Partial Class MainWindow
     Private Sub TitleBarDragElement_PreviewMouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles TitleBarDragElement.PreviewMouseLeftButtonDown
         DragMove()

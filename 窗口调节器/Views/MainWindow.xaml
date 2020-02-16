@@ -99,6 +99,9 @@
                                     <local:ToggleSwitch x:Name="ChkUseWasd">将 WASD 映射到 ↑→↓←</local:ToggleSwitch>
                                 </local:FluentControlChrome>
                                 <TextBlock FontSize="16">按键宏</TextBlock>
+                                <local:FluentControlChrome>
+                                    
+                                </local:FluentControlChrome>
                             </StackPanel>
                         </Expander>
                     </local:FluentControlChrome>
