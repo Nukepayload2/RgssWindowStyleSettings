@@ -99,47 +99,13 @@
                                     <local:ToggleSwitch x:Name="ChkUseWasd">将 WASDJK 映射到 ↑→↓←XZ</local:ToggleSwitch>
                                 </local:FluentControlChrome>
                                 <local:FluentControlChrome Margin="0,8">
-                                    <local:ToggleSwitch x:Name="ChkAutoDash">使用按键映射时, 自动跑步 (容易卡住)</local:ToggleSwitch>
+                                    <local:ToggleSwitch x:Name="ChkAutoDash">使用按键映射时, wasd 键自动跑步</local:ToggleSwitch>
                                 </local:FluentControlChrome>
-                                <TextBlock FontSize="16">屏幕键盘</TextBlock>
+                                <TextBlock FontSize="16">屏幕游戏键盘</TextBlock>
                                 <TextBlock>用鼠标或触摸屏操作游戏。暂不支持按住时连发。</TextBlock>
-                                <Grid Margin="16,4,16,16">
-                                    <Grid.Resources>
-                                        <Style TargetType="Button">
-                                            <Setter Property="Padding" Value="16,12"/>
-                                        </Style>
-                                        <Style TargetType="RepeatButton">
-                                            <Setter Property="Padding" Value="16,12"/>
-                                            <Setter Property="Delay" Value="100"/>
-                                            <Setter Property="Interval" Value="100"/>
-                                        </Style>
-                                    </Grid.Resources>
-                                    <StackPanel HorizontalAlignment="Left">
-                                        <local:FluentControlChrome HorizontalAlignment="Center">
-                                            <RepeatButton x:Name="BtnPressUp" Delay="100" Interval="100">↑</RepeatButton>
-                                        </local:FluentControlChrome>
-                                        <StackPanel Orientation="Horizontal">
-                                            <local:FluentControlChrome HorizontalAlignment="Left">
-                                                <RepeatButton x:Name="BtnPressLeft">←</RepeatButton>
-                                            </local:FluentControlChrome>
-                                            <local:FluentControlChrome HorizontalAlignment="Left" Margin="42,0,0,0">
-                                                <RepeatButton x:Name="BtnPressRight">→</RepeatButton>
-                                            </local:FluentControlChrome>
-                                        </StackPanel>
-                                        <local:FluentControlChrome HorizontalAlignment="Center">
-                                            <RepeatButton x:Name="BtnPressDown">↓</RepeatButton>
-                                        </local:FluentControlChrome>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                                                VerticalAlignment="Center">
-                                        <local:FluentControlChrome HorizontalAlignment="Left" Margin="0,16,16,0">
-                                            <Button x:Name="BtnPressX">X</Button>
-                                        </local:FluentControlChrome>
-                                        <local:FluentControlChrome HorizontalAlignment="Left" Margin="16,0,0,16">
-                                            <Button x:Name="BtnPressZ">Z</Button>
-                                        </local:FluentControlChrome>
-                                    </StackPanel>
-                                </Grid>
+                                <local:FluentControlChrome HorizontalAlignment="Left" Margin="2">
+                                    <Button x:Name="BtnOpenScreenKeyboard">打开</Button>
+                                </local:FluentControlChrome>
                             </StackPanel>
                         </Expander>
                     </local:FluentControlChrome>

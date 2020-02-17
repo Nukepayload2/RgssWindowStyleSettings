@@ -54,4 +54,9 @@ Module NativeMethods
     Declare Function IsWindow Lib "user32" (
         hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
+    Declare Function SendInput Lib "user32.dll" (
+        nInput As Integer,
+        <MarshalAs(UnmanagedType.LPArray, ArraySubType:=UnmanagedType.Struct, SizeParamIndex:=0)>
+        pInputs As INPUT(),
+        cbInput As Integer) As Integer
 End Module

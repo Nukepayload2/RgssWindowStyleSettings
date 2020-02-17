@@ -1,7 +1,7 @@
 ﻿Partial Class MainWindow
     Private Sub BtnResizable_Click(sender As Object, e As RoutedEventArgs) Handles BtnResizable.Click
         TblStatus.Text = String.Empty
-        Dim gameWnd = GetGameWindow()
+        Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
         If gameWnd Is Nothing Then
             Return
         End If
@@ -18,7 +18,7 @@
 
     Private Sub DetectGameWindow(silent As Boolean)
         TblStatus.Text = String.Empty
-        Dim gameWnd = GetGameWindow(silent)
+        Dim gameWnd = RgssSingleWindowManager.GetGameWindow(silent)
         If gameWnd Is Nothing Then
             Return
         End If

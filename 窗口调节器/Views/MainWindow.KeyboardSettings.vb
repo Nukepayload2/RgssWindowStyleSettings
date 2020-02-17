@@ -1,11 +1,10 @@
 ﻿Option Strict On
 
+Imports System.Runtime.InteropServices
 Imports System.Windows.Threading
-Imports Nukepayload2.Diagnostics
 Imports Nukepayload2.Diagnostics.Preview
 
 Partial Class MainWindow
-    Private _injector As InputInjector
 
     WithEvents MapWasdTimer As New DispatcherTimer With {
         .Interval = TimeSpan.FromSeconds(1 / 30)
@@ -17,30 +16,6 @@ Partial Class MainWindow
 
     Private Sub ChkUseWasd_Unchecked(sender As Object, e As RoutedEventArgs) Handles ChkUseWasd.Unchecked
         MapWasdTimer.Stop()
-    End Sub
-
-    Private Async Sub BtnPressUp_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressUp.Click
-        Await SimulateKeyPressAsync(BtnPressUp, VirtualKey.Up)
-    End Sub
-
-    Private Async Sub BtnPressDown_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressDown.Click
-        Await SimulateKeyPressAsync(BtnPressDown, VirtualKey.Down)
-    End Sub
-
-    Private Async Sub BtnPressLeft_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressLeft.Click
-        Await SimulateKeyPressAsync(BtnPressLeft, VirtualKey.Left)
-    End Sub
-
-    Private Async Sub BtnPressRight_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressRight.Click
-        Await SimulateKeyPressAsync(BtnPressRight, VirtualKey.Right)
-    End Sub
-
-    Private Async Sub BtnPressX_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressX.Click
-        Await SimulateKeyPressAsync(BtnPressX, VirtualKey.X)
-    End Sub
-
-    Private Async Sub BtnPressZ_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressZ.Click
-        Await SimulateKeyPressAsync(BtnPressZ, VirtualKey.Z)
     End Sub
 
     Private ReadOnly _keyMapping As (
@@ -56,13 +31,11 @@ Partial Class MainWindow
 
     Private _hasMoveKeyDown As Boolean
 
+    Private ReadOnly _downKeys As New List(Of VirtualKey)
+    Private ReadOnly _upKeys As New List(Of VirtualKey)
+
     Private Sub MapWasdTimer_Tick(sender As Object, e As EventArgs) Handles MapWasdTimer.Tick
-        Dim injector = GetInputInjector()
-        If injector Is Nothing Then
-            StopWasdMapping()
-            Return
-        End If
-        Dim gameWnd = GetGameWindow()
+        Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
         If gameWnd Is Nothing Then
             StopWasdMapping()
             Return
@@ -72,11 +45,41 @@ Partial Class MainWindow
             Return
         End If
 
-        MapKeys()
-        BindShiftToMoveKeys()
+        Dim downKeys = _downKeys
+        Dim upKeys = _upKeys
+        downKeys.Clear()
+        upKeys.Clear()
+        MapKeys(downKeys, upKeys)
+        BindShiftToMoveKeys(downKeys, upKeys)
+
+        If downKeys.Count + upKeys.Count = 0 Then
+            Return
+        End If
+
+        Dim inputs(downKeys.Count + upKeys.Count - 1) As INPUT
+        For i = 0 To downKeys.Count - 1
+            Dim keyInput As New InjectedInputKeyboardInfo With {
+                .VirtualKey = downKeys(i)
+            }
+            inputs(i) = New INPUT With {
+                .type = INPUT_KEYBOARD,
+                .u = New InputUnion With {.ki = keyInput}
+            }
+        Next
+        For i = downKeys.Count To inputs.Length - 1
+            Dim keyInput As New InjectedInputKeyboardInfo With {
+                .VirtualKey = upKeys(i - downKeys.Count),
+                .KeyOptions = InjectedInputKeyOptions.KeyUp
+            }
+            inputs(i) = New INPUT With {
+                .type = INPUT_KEYBOARD,
+                .u = New InputUnion With {.ki = keyInput}
+            }
+        Next
+        SendInput(inputs.Length, inputs, Marshal.SizeOf(Of INPUT))
     End Sub
 
-    Private Sub MapKeys()
+    Private Sub MapKeys(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey))
         Dim autoDash = ChkAutoDash.IsChecked.GetValueOrDefault
 
         For i = 0 To _keyMapping.Length - 1
@@ -86,18 +89,17 @@ Partial Class MainWindow
                     If .isDown Then
                         ' 按键状态一致
                     Else
-                        SendKeyDown(.mapTo)
+                        downKeys.Add(.mapTo)
                         Debug.WriteLine("按下 " & .mapTo.ToString)
                         .isDown = True
                     End If
                 Else
                     If .isDown Then
-                        SendKeyUp(.mapTo)
+                        upKeys.Add(.mapTo)
                         Debug.WriteLine("放开 " & .mapTo.ToString)
                         .isDown = False
                     Else
-                        ' 按键状态一致。但是不发这个非常容易卡住。
-                        If autoDash Then SendKeyUp(.mapTo)
+                        ' 按键状态一致。
                     End If
                 End If
             End With
@@ -105,7 +107,7 @@ Partial Class MainWindow
         Next
     End Sub
 
-    Private Sub BindShiftToMoveKeys()
+    Private Sub BindShiftToMoveKeys(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey))
         Dim autoDash = ChkAutoDash.IsChecked.GetValueOrDefault
         If Not autoDash Then
             Return
@@ -125,13 +127,13 @@ Partial Class MainWindow
             If _hasMoveKeyDown Then
                 ' 不变。
             Else
-                SendKeyDown(VirtualKey.LeftShift)
+                downKeys.Add(VirtualKey.LeftShift)
                 Debug.WriteLine("按下 Shift")
                 _hasMoveKeyDown = True
             End If
         Else
             If _hasMoveKeyDown Then
-                SendKeyUp(VirtualKey.LeftShift)
+                upKeys.Add(VirtualKey.LeftShift)
                 Debug.WriteLine("松开 Shift")
                 _hasMoveKeyDown = False
             Else
@@ -145,35 +147,7 @@ Partial Class MainWindow
         ChkUseWasd.IsChecked = False
     End Sub
 
-    Private Function GetInputInjector() As InputInjector
-        If _injector Is Nothing Then
-            Dim injector = InputInjector.TryCreateWithPreviewFeatures
-            If injector Is Nothing Then
-                MsgBox("当前操作系统不支持输入注入 API。", vbExclamation, "错误")
-                Return Nothing
-            End If
-            _injector = injector
-        End If
-        Return _injector
-    End Function
-
-    Private Async Function SimulateKeyPressAsync(curButton As UIElement, CurKey As VirtualKey) As Task
-        If Not InputInjectionApiInformation.IsInjectKeyboardInputApiPresent Then
-            MsgBox("当前操作系统不支持键盘注入 API。", vbExclamation, "错误")
-            Return
-        End If
-
-        Dim gameWnd = GetGameWindow()
-        If gameWnd Is Nothing Then
-            Return
-        End If
-        curButton.IsEnabled = False
-        Try
-            gameWnd.Activate()
-            Await SendKeyPressToGameAsync(CurKey)
-        Finally
-            curButton.IsEnabled = True
-        End Try
-    End Function
-
+    Private Sub BtnOpenScreenKeyboard_Click(sender As Object, e As RoutedEventArgs) Handles BtnOpenScreenKeyboard.Click
+        Application.ScreenKeyboardWindow.Show()
+    End Sub
 End Class

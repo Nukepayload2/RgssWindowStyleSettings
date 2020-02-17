@@ -18,4 +18,25 @@
     End Sub
 
     Public Shared ReadOnly Property Settings As New SettingsModel
+
+#Region "ScreenKeyboardWindow 窗口的单实例管理"
+    Private Shared _ScreenKeyboardWindow As ScreenKeyboardWindow
+
+    Public Shared ReadOnly Property ScreenKeyboardWindow As ScreenKeyboardWindow
+        Get
+            If _ScreenKeyboardWindow Is Nothing Then
+                _ScreenKeyboardWindow = New ScreenKeyboardWindow
+                AddHandler _ScreenKeyboardWindow.Closed, AddressOf ScreenKeyboardWindowClosed
+            End If
+
+            Return _ScreenKeyboardWindow
+        End Get
+    End Property
+
+    Private Shared Sub ScreenKeyboardWindowClosed(sender As Object, e As EventArgs)
+        RemoveHandler _ScreenKeyboardWindow.Closed, AddressOf ScreenKeyboardWindowClosed
+        _ScreenKeyboardWindow = Nothing
+    End Sub
+#End Region
+
 End Class

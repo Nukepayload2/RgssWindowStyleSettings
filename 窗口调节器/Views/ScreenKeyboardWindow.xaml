@@ -1,0 +1,45 @@
+﻿<Window x:Class="ScreenKeyboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:窗口调节器"
+        mc:Ignorable="d"
+        Title="屏幕游戏键盘" Height="250" Width="800">
+    <Grid Margin="16,4,16,16">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Padding" Value="16,12"/>
+            </Style>
+            <Style TargetType="RepeatButton">
+                <Setter Property="Padding" Value="16,12"/>
+                <Setter Property="Delay" Value="100"/>
+                <Setter Property="Interval" Value="100"/>
+            </Style>
+        </Grid.Resources>
+        <StackPanel HorizontalAlignment="Left">
+            <local:FluentControlChrome HorizontalAlignment="Center">
+                <RepeatButton x:Name="BtnPressUp" Delay="100" Interval="100">↑</RepeatButton>
+            </local:FluentControlChrome>
+            <StackPanel Orientation="Horizontal">
+                <local:FluentControlChrome HorizontalAlignment="Left">
+                    <RepeatButton x:Name="BtnPressLeft">←</RepeatButton>
+                </local:FluentControlChrome>
+                <local:FluentControlChrome HorizontalAlignment="Left" Margin="42,0,0,0">
+                    <RepeatButton x:Name="BtnPressRight">→</RepeatButton>
+                </local:FluentControlChrome>
+            </StackPanel>
+            <local:FluentControlChrome HorizontalAlignment="Center">
+                <RepeatButton x:Name="BtnPressDown">↓</RepeatButton>
+            </local:FluentControlChrome>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <local:FluentControlChrome HorizontalAlignment="Left" Margin="0,16,16,0">
+                <Button x:Name="BtnPressX">X</Button>
+            </local:FluentControlChrome>
+            <local:FluentControlChrome HorizontalAlignment="Left" Margin="16,0,0,16">
+                <Button x:Name="BtnPressZ">Z</Button>
+            </local:FluentControlChrome>
+        </StackPanel>
+    </Grid>
+</Window>
