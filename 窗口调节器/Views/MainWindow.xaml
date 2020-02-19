@@ -8,7 +8,7 @@
         UseLayoutRounding="True" AngleWidth="12" ResizeThickness="4"
         BorderBrush="DodgerBlue" BorderThickness="1" AllowsTransparency="True" WindowStyle="None"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
-        Title="RGSS 窗口调节器" Height="450" Width="400">
+        Title="RGSS 窗口调节器" Height="550" Width="400">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
