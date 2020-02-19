@@ -5,11 +5,11 @@ Imports Nukepayload2.Diagnostics.Preview
 Public Class ScreenKeyboardWindow
 
     Private Async Sub BtnPressX_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressX.Click
-        Await SimulateKeyPressAsync(BtnPressX, VirtualKey.X)
+        Await SimulateKeyPressAsync(VirtualKey.X)
     End Sub
 
     Private Async Sub BtnPressZ_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressZ.Click
-        Await SimulateKeyPressAsync(BtnPressZ, VirtualKey.Z)
+        Await SimulateKeyPressAsync(VirtualKey.Z)
     End Sub
 
     Private Sub ScreenKeyboardWindow_SourceInitialized(sender As Object, e As EventArgs) Handles Me.SourceInitialized
@@ -17,7 +17,7 @@ Public Class ScreenKeyboardWindow
         SetWindowLong(hWnd, GWL_EXSTYLE, GetWindowLong(hWnd, GWL_EXSTYLE).ToInt64 Or WS_EX_NOACTIVATE)
     End Sub
 
-    Private Async Function SimulateKeyPressAsync(curButton As UIElement, CurKey As VirtualKey) As Task
+    Private Async Function SimulateKeyPressAsync(curKey As VirtualKey) As Task
         Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
         If gameWnd Is Nothing Then
             Return
@@ -26,8 +26,10 @@ Public Class ScreenKeyboardWindow
             gameWnd.Activate()
             Debug.WriteLine("Game window activated")
         End If
-        Await SendKeyPressToGameAsync(CurKey)
-        Debug.WriteLine("Send key " & CurKey.ToString)
+        SendKeyDown(curKey)
+        Await Task.Delay(100)
+        SendKeyUp(curKey)
+        Debug.WriteLine("Send key " & curKey.ToString)
     End Function
 
     Private Sub SendKey(key As VirtualKey, options As InjectedInputKeyOptions)
