@@ -1,8 +1,9 @@
-﻿Imports Nukepayload2.Diagnostics
+﻿Imports System.Runtime.InteropServices
+Imports System.Windows.Interop
+Imports Nukepayload2.Diagnostics
 Imports Nukepayload2.Diagnostics.Preview
 
 Public Class ScreenKeyboardWindow
-    Private _injector As InputInjector
 
     Private Async Sub BtnPressUp_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressUp.Click
         Await SimulateKeyPressAsync(BtnPressUp, VirtualKey.Up)
@@ -28,35 +29,61 @@ Public Class ScreenKeyboardWindow
         Await SimulateKeyPressAsync(BtnPressZ, VirtualKey.Z)
     End Sub
 
-    Private Function GetWin10InputInjector() As InputInjector
-        If _injector Is Nothing Then
-            Dim injector = InputInjector.TryCreateWithPreviewFeatures
-            If injector Is Nothing Then
-                MsgBox("当前操作系统不支持 Win10 输入注入 API。", vbExclamation, "错误")
-                Return Nothing
-            End If
-            _injector = injector
-        End If
-        Return _injector
-    End Function
+    Private Sub ScreenKeyboardWindow_SourceInitialized(sender As Object, e As EventArgs) Handles Me.SourceInitialized
+        Dim hWnd = New WindowInteropHelper(Me).Handle
+        SetWindowLong(hWnd, GWL_EXSTYLE, GetWindowLong(hWnd, GWL_EXSTYLE).ToInt64 Or WS_EX_NOACTIVATE)
+    End Sub
+
+    Private Sub BtnPressDown_PreviewMouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles BtnPressDown.PreviewMouseLeftButtonDown
+        Debug.WriteLine("Down press")
+    End Sub
+
+    Private Sub BtnPressDown_PreviewMouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnPressDown.PreviewMouseLeftButtonUp
+        Debug.WriteLine("Down up")
+    End Sub
 
     Private Async Function SimulateKeyPressAsync(curButton As UIElement, CurKey As VirtualKey) As Task
-        If Not InputInjectionApiInformation.IsInjectKeyboardInputApiPresent Then
-            MsgBox("当前操作系统不支持 Win10 键盘注入 API。", vbExclamation, "错误")
-            Return
-        End If
-
         Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
         If gameWnd Is Nothing Then
             Return
         End If
         curButton.IsEnabled = False
         Try
-            gameWnd.Activate()
+            If Not gameWnd.IsForeground Then
+                gameWnd.Activate()
+                Debug.WriteLine("Game window activated")
+            End If
             Await SendKeyPressToGameAsync(CurKey)
+            Debug.WriteLine("Send key " & CurKey.ToString)
         Finally
             curButton.IsEnabled = True
         End Try
     End Function
+
+    Private Sub SendKeyUp(key As VirtualKey)
+        Dim keyInput As New InjectedInputKeyboardInfo With {
+            .VirtualKey = key,
+            .KeyOptions = InjectedInputKeyOptions.KeyUp
+        }
+        Dim inputs As INPUT() = {
+            New INPUT With {
+                .type = INPUT_KEYBOARD,
+                .u = New InputUnion With {.ki = keyInput}
+            }}
+        SendInput(inputs.Length, inputs, Marshal.SizeOf(Of INPUT))
+    End Sub
+
+    Private Sub SendKeyDown(key As VirtualKey)
+        Dim keyInput As New InjectedInputKeyboardInfo With {
+            .VirtualKey = key,
+            .KeyOptions = InjectedInputKeyOptions.KeyUp
+        }
+        Dim inputs As INPUT() = {
+            New INPUT With {
+                .type = INPUT_KEYBOARD,
+                .u = New InputUnion With {.ki = keyInput}
+            }}
+        SendInput(inputs.Length, inputs, Marshal.SizeOf(Of INPUT))
+    End Sub
 
 End Class

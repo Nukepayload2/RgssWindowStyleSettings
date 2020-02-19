@@ -1,21 +1,18 @@
-﻿Imports System.Reflection
-
-Partial Class MainWindow
+﻿Partial Class MainWindow
 
     Private Sub BtnAbout_Click(sender As Object, e As RoutedEventArgs) Handles BtnAbout.Click
-        Dim version = GetType(MainWindow).Assembly.
-            GetCustomAttribute(Of AssemblyFileVersionAttribute)?.Version
-        MsgBox($"版本: {version}
-作者: Nukepayload2
-禁止用于商业用途。如发此软件被贩卖，请举报店铺。", MsgBoxStyle.Information, "关于 " & Title)
+        Dim aboutWindow = Application.AboutWindow
+        aboutWindow.Owner = Me
+        aboutWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner
+        aboutWindow.ShowDialog()
     End Sub
 
-    Private Sub BtnViewSource_Click(sender As Object, e As RoutedEventArgs) Handles BtnViewSource.Click
-        Process.Start("explorer", "https://github.com/Nukepayload2/RgssWindowStyleSettings")
+    Private Sub BtnMinimize_Click(sender As Object, e As RoutedEventArgs) Handles BtnMinimize.Click
+        WindowState = WindowState.Minimized
     End Sub
 
-    Private Sub BtnViewReleases_Click(sender As Object, e As RoutedEventArgs) Handles BtnViewReleases.Click
-        Process.Start("explorer", "https://gitee.com/nukepayload2/RgssWindowStyleMgrDocs/releases")
+    Private Sub BtnClose_Click(sender As Object, e As RoutedEventArgs) Handles BtnClose.Click
+        Close()
     End Sub
 
 End Class

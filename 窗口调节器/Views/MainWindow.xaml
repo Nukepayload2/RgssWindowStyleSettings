@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:窗口调节器" x:Name="ThisWindow" ResizeThickness="4"
-        mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" 
-        UseLayoutRounding="True" AngleWidth="12"
-        MinWidth="400" MinHeight="350" BorderBrush="DodgerBlue" BorderThickness="1"
+        xmlns:local="clr-namespace:窗口调节器" x:Name="ThisWindow"
+        mc:Ignorable="d"  MinWidth="400" MinHeight="350" 
+        UseLayoutRounding="True" AngleWidth="12" ResizeThickness="4"
+        BorderBrush="DodgerBlue" BorderThickness="1" AllowsTransparency="True" WindowStyle="None"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
         Title="RGSS 窗口调节器" Height="450" Width="400">
     <Window.Resources>
@@ -30,13 +30,6 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/Nukepayload2.UI.Win32;component/Themes/Generic.xaml"/>
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition/>
@@ -44,19 +37,13 @@
         <Grid x:Name="TitleBar">
             <Rectangle x:Name="TitleBarDragElement" Fill="#01FFFFFF"/>
             <TextBlock Margin="8" IsHitTestVisible="False" Text="{Binding ElementName=ThisWindow, Path=Title}"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,48,0" VerticalAlignment="Top">
-                <Button x:Name="BtnViewReleases"
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Button x:Name="BtnAbout" VerticalAlignment="Top"
                     Background="#3F7F7F7F" BorderThickness="0"
-                    Padding="18,4" Margin="0,0,4,0">发行版...</Button>
-                <Button x:Name="BtnViewSource"
-                    Background="#3F7F7F7F" BorderThickness="0"
-                    Padding="18,4" Margin="0,0,4,0">源代码...</Button>
-                <Button x:Name="BtnAbout"
-                    Background="#3F7F7F7F" BorderThickness="0"
-                    Padding="18,4">关于</Button>
+                    Padding="18,4" Margin="0,0,4,0">关于</Button>
+                <Button x:Name="BtnMinimize" Style="{StaticResource MinimizeButtonStyle}" ToolTip="最小化"></Button>
+                <Button x:Name="BtnClose" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
             </StackPanel>
-
-            <Button Click="BtnClose_Click" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
         </Grid>
         <Border Grid.Row="1" x:Name="ClientArea">
             <ScrollViewer x:Name="ContentScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -99,12 +86,11 @@
                                     <local:ToggleSwitch x:Name="ChkUseWasd">将 WASDJK 映射到 ↑→↓←XZ</local:ToggleSwitch>
                                 </local:FluentControlChrome>
                                 <local:FluentControlChrome Margin="0,8">
-                                    <local:ToggleSwitch x:Name="ChkAutoDash">使用按键映射时, wasd 键自动跑步</local:ToggleSwitch>
+                                    <local:ToggleSwitch x:Name="ChkAutoDash">映射 WASD 键时自动跑步</local:ToggleSwitch>
                                 </local:FluentControlChrome>
-                                <TextBlock FontSize="16">屏幕游戏键盘</TextBlock>
-                                <TextBlock>用鼠标或触摸屏操作游戏。暂不支持按住时连发。</TextBlock>
+                                <TextBlock>映射触摸或鼠标输入</TextBlock>
                                 <local:FluentControlChrome HorizontalAlignment="Left" Margin="2">
-                                    <Button x:Name="BtnOpenScreenKeyboard">打开</Button>
+                                    <Button x:Name="BtnOpenScreenKeyboard">打开屏幕键盘</Button>
                                 </local:FluentControlChrome>
                             </StackPanel>
                         </Expander>

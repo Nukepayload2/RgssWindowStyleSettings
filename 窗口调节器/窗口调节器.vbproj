@@ -75,6 +75,9 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\NativeConstants.vb" />
     <Compile Include="Rgss\RgssSingleWindowManager.vb" />
+    <Compile Include="Views\AboutWindow.xaml.vb">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.AdvancedSettings.vb" />
     <Compile Include="Views\MainWindow.Expanders.vb" />
     <Compile Include="Views\MainWindow.KeyboardSettings.vb" />
@@ -90,6 +93,10 @@
     <Compile Include="Views\ScreenKeyboardWindow.xaml.vb">
       <DependentUpon>ScreenKeyboardWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

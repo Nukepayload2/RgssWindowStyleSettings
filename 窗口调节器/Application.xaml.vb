@@ -39,4 +39,25 @@
     End Sub
 #End Region
 
+
+#Region "AboutWindow 窗口的单实例管理"
+    Private Shared _AboutWindow As AboutWindow
+
+    Public Shared ReadOnly Property AboutWindow As AboutWindow
+        Get
+            If _AboutWindow Is Nothing Then
+                _AboutWindow = New AboutWindow
+                AddHandler _AboutWindow.Closed, AddressOf AboutWindowClosed
+            End If
+
+            Return _AboutWindow
+        End Get
+    End Property
+
+    Private Shared Sub AboutWindowClosed(sender As Object, e As EventArgs)
+        RemoveHandler _AboutWindow.Closed, AddressOf AboutWindowClosed
+        _AboutWindow = Nothing
+    End Sub
+#End Region
+
 End Class

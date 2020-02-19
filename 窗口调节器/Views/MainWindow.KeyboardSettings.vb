@@ -51,7 +51,10 @@ Partial Class MainWindow
         upKeys.Clear()
         MapKeys(downKeys, upKeys)
         BindShiftToMoveKeys(downKeys, upKeys)
+        SendKeyboardStateChanges(downKeys, upKeys)
+    End Sub
 
+    Private Shared Sub SendKeyboardStateChanges(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey))
         If downKeys.Count + upKeys.Count = 0 Then
             Return
         End If

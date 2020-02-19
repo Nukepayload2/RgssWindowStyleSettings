@@ -7,6 +7,8 @@ Module NativeConstants
     Public Const WS_THICKFRAME = &H40000
     Public Const WS_MAXIMIZEBOX = &H10000
     Public Const INPUT_KEYBOARD = 1
+    Public Const GWL_EXSTYLE = -20
+    Public Const WS_EX_NOACTIVATE = &H8000000
 End Module
 
 <StructLayout(LayoutKind.Explicit)>
