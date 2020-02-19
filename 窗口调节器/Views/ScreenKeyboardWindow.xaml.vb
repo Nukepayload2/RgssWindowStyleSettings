@@ -31,7 +31,8 @@ Public Class ScreenKeyboardWindow
     End Function
 
     Private Sub SendKey(key As VirtualKey, options As InjectedInputKeyOptions)
-        Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
+        Dim gameWnd = RgssSingleWindowManager.GetGameWindow(
+            silent:=options <> InjectedInputKeyOptions.None)
         If gameWnd Is Nothing Then
             Return
         End If
