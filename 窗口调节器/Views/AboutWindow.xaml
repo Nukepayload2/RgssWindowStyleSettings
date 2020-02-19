@@ -7,7 +7,8 @@
         mc:Ignorable="d" UseLayoutRounding="True" AngleWidth="12" ResizeThickness="4"
         BorderBrush="DodgerBlue" BorderThickness="1" AllowsTransparency="True" WindowStyle="None"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
-        Title="关于 RGSS 窗口调节器" Height="280" Width="350">
+        MinHeight="320" MinWidth="300"
+        Title="关于 RGSS 窗口调节器" Height="350" Width="350">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,12 +25,12 @@
             <Rectangle x:Name="TitleBarDragElement" Fill="#01FFFFFF"/>
             <TextBlock Margin="8" IsHitTestVisible="False" Text="{Binding ElementName=ThisWindow, Path=Title}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                <Button x:Name="BtnClose" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
+                <Button x:Name="BtnClose" Focusable="False" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
             </StackPanel>
         </Grid>
-        <Border Grid.Row="1" x:Name="ClientArea">
+        <Grid Grid.Row="1" x:Name="ClientArea">
             <StackPanel Margin="8">
-                <TextBlock Margin="4" x:Name="TblDescription"></TextBlock>
+                <TextBlock Margin="4" x:Name="TblDescription" TextWrapping="Wrap"></TextBlock>
                 <TextBlock Margin="4">发行版托管在 Gitee 上</TextBlock>
                 <local:FluentControlChrome HorizontalAlignment="Left" Margin="4">
                     <Button x:Name="BtnViewReleases"
@@ -49,6 +50,12 @@
                             Padding="18,4">报告问题...</Button>
                 </local:FluentControlChrome>
             </StackPanel>
-        </Border>
+            <local:FluentControlChrome Margin="0,8,24,16" 
+                                       HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button x:Name="BtnOK" IsDefault="True"
+                            Background="#3F7F7F7F" BorderThickness="0"
+                            Padding="32,8">确定</Button>
+            </local:FluentControlChrome>
+        </Grid>
     </Grid>
 </ext:BorderlessWindow>

@@ -32,7 +32,7 @@ Public Class AboutWindow
         End If
     End Sub
 
-    Private Sub BtnClose_Click(sender As Object, e As RoutedEventArgs) Handles BtnClose.Click
+    Private Sub BtnClose_Click(sender As Object, e As RoutedEventArgs) Handles BtnClose.Click, BtnOK.Click
         Close()
     End Sub
 

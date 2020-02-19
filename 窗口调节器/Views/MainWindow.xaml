@@ -41,8 +41,8 @@
                 <Button x:Name="BtnAbout" VerticalAlignment="Top"
                     Background="#3F7F7F7F" BorderThickness="0"
                     Padding="18,4" Margin="0,0,4,0">关于</Button>
-                <Button x:Name="BtnMinimize" Style="{StaticResource MinimizeButtonStyle}" ToolTip="最小化"></Button>
-                <Button x:Name="BtnClose" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
+                <Button x:Name="BtnMinimize" Focusable="False" Style="{StaticResource MinimizeButtonStyle}" ToolTip="最小化"></Button>
+                <Button x:Name="BtnClose" Focusable="False" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
             </StackPanel>
         </Grid>
         <Border Grid.Row="1" x:Name="ClientArea">
