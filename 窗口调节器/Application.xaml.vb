@@ -23,7 +23,7 @@
         End If
     End Sub
 
-    Private Const PackageSeriesId = "72c889b9-99b2-4bc8-b922-9d031e1252cf_h0pghn313xt82"
+    Private Const PackageSeriesId = "72c889b9-99b2-4bc8-b922-9d031e1252cf_y43krmhzyf8x2"
 
     Private Function TryGetLocalStateFolder() As String
         Dim folder = $"%localappdata%\Packages\{PackageSeriesId}\LocalState"

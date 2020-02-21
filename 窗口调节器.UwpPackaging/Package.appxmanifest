@@ -8,7 +8,7 @@
 
   <Identity
     Name="72c889b9-99b2-4bc8-b922-9d031e1252cf"
-    Publisher="CN=19393"
+    Publisher="CN=Nukepayload2, O=Nukepayload2, C=CN"
     Version="1.2.0.0" />
 
   <Properties>
