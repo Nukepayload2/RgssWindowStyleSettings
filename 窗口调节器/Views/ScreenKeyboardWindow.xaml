@@ -3,42 +3,77 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:窗口调节器"
-        mc:Ignorable="d" UseLayoutRounding="True"
+        xmlns:local="clr-namespace:窗口调节器" Stylus.IsPressAndHoldEnabled="False"
+        mc:Ignorable="d" UseLayoutRounding="True" MinWidth="640" MinHeight="220"
         Title="屏幕游戏键盘" Height="250" Width="800">
-    <Grid Margin="16,4,16,16">
+    <Grid Margin="16">
         <Grid.Resources>
             <Style TargetType="Button">
                 <Setter Property="Padding" Value="16,12"/>
             </Style>
-            <Style TargetType="RepeatButton">
-                <Setter Property="Padding" Value="16,12"/>
-                <Setter Property="Delay" Value="100"/>
-                <Setter Property="Interval" Value="100"/>
+            <Style TargetType="Ellipse">
+                <Setter Property="Width" Value="48"/>
+                <Setter Property="Height" Value="48"/>
             </Style>
         </Grid.Resources>
-        <StackPanel HorizontalAlignment="Left">
-            <local:FluentControlChrome HorizontalAlignment="Center">
-                <RepeatButton x:Name="BtnPressUp" Delay="100" Interval="100">↑</RepeatButton>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <local:FluentControlChrome x:Name="BtnPressUp" Background="Transparent" HorizontalAlignment="Center">
+                <Grid>
+                    <Ellipse Fill="LightGray"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">↑</TextBlock>
+                </Grid>
             </local:FluentControlChrome>
             <StackPanel Orientation="Horizontal">
-                <local:FluentControlChrome HorizontalAlignment="Left">
-                    <RepeatButton x:Name="BtnPressLeft">←</RepeatButton>
+                <local:FluentControlChrome x:Name="BtnPressLeft" Background="Transparent" HorizontalAlignment="Left">
+                    <Grid>
+                        <Ellipse Fill="LightGray"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">←</TextBlock>
+                    </Grid>
                 </local:FluentControlChrome>
-                <local:FluentControlChrome HorizontalAlignment="Left" Margin="42,0,0,0">
-                    <RepeatButton x:Name="BtnPressRight">→</RepeatButton>
+                <local:FluentControlChrome x:Name="BtnPressRight" Background="Transparent" HorizontalAlignment="Left" Margin="42,0,0,0">
+                    <Grid>
+                        <Ellipse Fill="LightGray"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">→</TextBlock>
+                    </Grid>
                 </local:FluentControlChrome>
             </StackPanel>
-            <local:FluentControlChrome HorizontalAlignment="Center">
-                <RepeatButton x:Name="BtnPressDown">↓</RepeatButton>
+            <local:FluentControlChrome x:Name="BtnPressDown" Background="Transparent" HorizontalAlignment="Center">
+                <Grid>
+                    <Ellipse Fill="LightGray"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">↓</TextBlock>
+                </Grid>
             </local:FluentControlChrome>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <local:FluentControlChrome HorizontalAlignment="Left" Margin="0,16,16,0">
-                <Button x:Name="BtnPressX">X</Button>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Foreground="Gray"
+                   VerticalAlignment="Center" TextWrapping="Wrap" Margin="16,8">
+            <Run FontSize="16">操作</Run><LineBreak/>
+            方向键：对应键盘的方向键。跟 x 键一起按的话视为方向键与 Shift 键一起按。<LineBreak/>
+            x 键：如果单独按，对应键盘的 x 键。如果跟方向键一起按，代表 Shift 键。<LineBreak/>
+            z 键：对应键盘的 z 键。
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Bottom">
+            <local:FluentControlChrome x:Name="BtnPressX" 
+                                       Margin="0,16,16,0"
+                                       Background="Transparent"
+                                       HorizontalAlignment="Left">
+                <Grid>
+                    <Ellipse Fill="LightGray"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">X</TextBlock>
+                </Grid>
             </local:FluentControlChrome>
-            <local:FluentControlChrome HorizontalAlignment="Left" Margin="16,0,0,16">
-                <Button x:Name="BtnPressZ">Z</Button>
+            <local:FluentControlChrome x:Name="BtnPressZ"
+                                       Margin="16,0,0,16"
+                                       Background="Transparent" 
+                                       HorizontalAlignment="Left">
+                <Grid>
+                    <Ellipse Fill="LightGray"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Z</TextBlock>
+                </Grid>
             </local:FluentControlChrome>
         </StackPanel>
     </Grid>

@@ -4,6 +4,8 @@
     ' 可以在此文件中进行处理。
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+        Dim oldCurDir = IO.Directory.GetCurrentDirectory
+        SetCurDirToLocalState()
         Forms.Application.EnableVisualStyles()
         Try
             If Not Settings.IsLoaded Then
@@ -11,10 +13,35 @@
             End If
         Catch ex As Exception
         End Try
+        IO.Directory.SetCurrentDirectory(oldCurDir)
     End Sub
 
+    Private Sub SetCurDirToLocalState()
+        Dim localState = TryGetLocalStateFolder()
+        If localState IsNot Nothing Then
+            IO.Directory.SetCurrentDirectory(localState)
+        End If
+    End Sub
+
+    Private Const PackageSeriesId = "72c889b9-99b2-4bc8-b922-9d031e1252cf_h0pghn313xt82"
+
+    Private Function TryGetLocalStateFolder() As String
+        Dim folder = $"%localappdata%\Packages\{PackageSeriesId}\LocalState"
+        folder = Environment.ExpandEnvironmentVariables(folder)
+        If Not IO.Directory.Exists(folder) Then
+            Return Nothing
+        End If
+        Return folder
+    End Function
+
     Private Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.[Exit]
-        Settings.Save()
+        Dim oldCurDir = IO.Directory.GetCurrentDirectory
+        SetCurDirToLocalState()
+        Try
+            Settings.Save()
+        Catch ex As Exception
+        End Try
+        IO.Directory.SetCurrentDirectory(oldCurDir)
     End Sub
 
     Public Shared ReadOnly Property Settings As New SettingsModel

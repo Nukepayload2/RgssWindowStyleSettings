@@ -4,12 +4,125 @@ Imports Nukepayload2.Diagnostics.Preview
 
 Public Class ScreenKeyboardWindow
 
-    Private Async Sub BtnPressX_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressX.Click
-        Await SimulateKeyPressAsync(VirtualKey.X)
+    Private _xButtonPressed As Boolean
+    Private _xButtonAsShift As Boolean
+
+    Private Sub BtnPressX_MouseLeftButtonDown() Handles BtnPressX.PreviewMouseLeftButtonDown, BtnPressX.PreviewTouchDown, BtnPressX.TouchEnter
+        If _xButtonPressed Then
+            Return
+        End If
+        _xButtonPressed = True
+        If _directionPressed > 0 Then
+            _xButtonAsShift = True
+            SendKeyDown(VirtualKey.LeftShift)
+        End If
     End Sub
 
-    Private Async Sub BtnPressZ_Click(sender As Object, e As RoutedEventArgs) Handles BtnPressZ.Click
+    Private Async Sub BtnPressX_LeftUpOrMouseLeave() Handles BtnPressX.PreviewMouseLeftButtonUp, BtnPressX.MouseLeave, BtnPressX.PreviewTouchUp, BtnPressX.TouchLeave
+        If Not _xButtonPressed Then
+            Return
+        End If
+        _xButtonPressed = False
+        If _xButtonAsShift Then
+            _xButtonAsShift = False
+            SendKeyUp(VirtualKey.LeftShift)
+        Else
+            Await SimulateKeyPressAsync(VirtualKey.X)
+        End If
+    End Sub
+
+    Private _zButtonPressed As Boolean
+    Private Sub BtnPressZ_MouseLeftButtonDown() Handles BtnPressZ.PreviewMouseLeftButtonDown, BtnPressZ.PreviewTouchDown, BtnPressZ.TouchEnter
+        _zButtonPressed = True
+    End Sub
+
+    Private Async Sub BtnPressZ_MouseLeftButtonUp() Handles BtnPressZ.PreviewMouseLeftButtonUp, BtnPressZ.MouseLeave, BtnPressZ.PreviewTouchUp, BtnPressZ.TouchLeave
+        If Not _zButtonPressed Then
+            Return
+        End If
+        _zButtonPressed = False
         Await SimulateKeyPressAsync(VirtualKey.Z)
+    End Sub
+
+    Private _directionPressed As Integer
+    Private _upPressed As Boolean
+    Private Sub BtnPressUp_MouseLeftButtonDown() Handles BtnPressUp.PreviewMouseLeftButtonDown, BtnPressUp.PreviewTouchDown, BtnPressUp.TouchEnter
+        If _upPressed Then
+            Return
+        End If
+        _upPressed = True
+        OnDirectionPressed()
+        SendKeyDown(VirtualKey.Up)
+    End Sub
+
+    Private Sub BtnPressUp_MouseLeaveOrLeftButtonUp() Handles BtnPressUp.MouseLeave, BtnPressUp.PreviewMouseLeftButtonUp, BtnPressUp.PreviewTouchUp, BtnPressUp.TouchLeave
+        If _upPressed Then
+            _directionPressed -= 1
+            _upPressed = False
+            SendKeyUp(VirtualKey.Up)
+        End If
+    End Sub
+
+    Private _downPressed As Boolean
+    Private Sub BtnPressDown_MouseLeftButtonDown() Handles BtnPressDown.PreviewMouseLeftButtonDown, BtnPressDown.PreviewTouchDown, BtnPressDown.TouchEnter
+        If _downPressed Then
+            Return
+        End If
+        _downPressed = True
+        OnDirectionPressed()
+        SendKeyDown(VirtualKey.Down)
+    End Sub
+
+    Private Sub BtnPressDown_MouseLeaveOrLeftButtonUp() Handles BtnPressDown.MouseLeave, BtnPressDown.PreviewMouseLeftButtonUp, BtnPressDown.PreviewTouchUp, BtnPressDown.TouchLeave
+        If _downPressed Then
+            _directionPressed -= 1
+            _downPressed = False
+            SendKeyUp(VirtualKey.Down)
+        End If
+    End Sub
+
+    Private _rightPressed As Boolean
+    Private Sub BtnPressRight_MouseLeftButtonDown() Handles BtnPressRight.PreviewMouseLeftButtonDown, BtnPressRight.PreviewTouchDown, BtnPressRight.TouchEnter
+        If _rightPressed Then
+            Return
+        End If
+        _rightPressed = True
+        OnDirectionPressed()
+        SendKeyDown(VirtualKey.Right)
+    End Sub
+
+    Private Sub BtnPressRight_MouseLeaveOrLeftButtonUp() Handles BtnPressRight.MouseLeave, BtnPressRight.PreviewMouseLeftButtonUp, BtnPressRight.PreviewTouchUp, BtnPressRight.TouchLeave
+        If _rightPressed Then
+            _directionPressed -= 1
+            _rightPressed = False
+            SendKeyUp(VirtualKey.Right)
+        End If
+    End Sub
+
+    Private _leftPressed As Boolean
+    Private Sub BtnPressLeft_MouseLeftButtonDown() Handles BtnPressLeft.PreviewMouseLeftButtonDown, BtnPressLeft.PreviewTouchDown, BtnPressLeft.TouchEnter
+        If _leftPressed Then
+            Return
+        End If
+        _leftPressed = True
+        OnDirectionPressed()
+        SendKeyDown(VirtualKey.Left)
+    End Sub
+
+    Private Sub BtnPressLeft_MouseLeaveOrLeftButtonUp() Handles BtnPressLeft.MouseLeave, BtnPressLeft.PreviewMouseLeftButtonUp, BtnPressLeft.PreviewTouchUp, BtnPressLeft.TouchLeave
+        If _leftPressed Then
+            _directionPressed -= 1
+            _leftPressed = False
+            SendKeyUp(VirtualKey.Left)
+        End If
+    End Sub
+
+    Private Sub OnDirectionPressed()
+        _directionPressed += 1
+        If _xButtonPressed AndAlso Not _xButtonAsShift Then
+            _xButtonAsShift = True
+            SendKeyDown(VirtualKey.LeftShift)
+        End If
     End Sub
 
     Private Sub ScreenKeyboardWindow_SourceInitialized(sender As Object, e As EventArgs) Handles Me.SourceInitialized
@@ -60,58 +173,6 @@ Public Class ScreenKeyboardWindow
 
     Private Sub SendKeyUp(key As VirtualKey)
         SendKey(key, InjectedInputKeyOptions.KeyUp)
-    End Sub
-
-    Private _upPressed As Boolean
-    Private Sub BtnPressUp_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles BtnPressUp.PreviewMouseLeftButtonDown
-        _upPressed = True
-        SendKeyDown(VirtualKey.Up)
-    End Sub
-
-    Private Sub BtnPressUp_MouseLeaveOrLeftButtonUp() Handles BtnPressUp.MouseLeave, BtnPressUp.PreviewMouseLeftButtonUp
-        If _upPressed Then
-            _upPressed = False
-            SendKeyUp(VirtualKey.Up)
-        End If
-    End Sub
-
-    Private _downPressed As Boolean
-    Private Sub BtnPressDown_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles BtnPressDown.PreviewMouseLeftButtonDown
-        _downPressed = True
-        SendKeyDown(VirtualKey.Down)
-    End Sub
-
-    Private Sub BtnPressDown_MouseLeaveOrLeftButtonUp() Handles BtnPressDown.MouseLeave, BtnPressDown.PreviewMouseLeftButtonUp
-        If _downPressed Then
-            _downPressed = False
-            SendKeyUp(VirtualKey.Down)
-        End If
-    End Sub
-
-    Private _rightPressed As Boolean
-    Private Sub BtnPressRight_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles BtnPressRight.PreviewMouseLeftButtonDown
-        _rightPressed = True
-        SendKeyDown(VirtualKey.Right)
-    End Sub
-
-    Private Sub BtnPressRight_MouseLeaveOrLeftButtonUp() Handles BtnPressRight.MouseLeave, BtnPressRight.PreviewMouseLeftButtonUp
-        If _rightPressed Then
-            _rightPressed = False
-            SendKeyUp(VirtualKey.Right)
-        End If
-    End Sub
-
-    Private _leftPressed As Boolean
-    Private Sub BtnPressLeft_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles BtnPressLeft.PreviewMouseLeftButtonDown
-        _leftPressed = True
-        SendKeyDown(VirtualKey.Left)
-    End Sub
-
-    Private Sub BtnPressLeft_MouseLeaveOrLeftButtonUp() Handles BtnPressLeft.MouseLeave, BtnPressLeft.PreviewMouseLeftButtonUp
-        If _leftPressed Then
-            _leftPressed = False
-            SendKeyUp(VirtualKey.Left)
-        End If
     End Sub
 
 End Class
