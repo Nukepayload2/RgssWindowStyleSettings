@@ -3,7 +3,7 @@
 Public Class SettingsModel
     Public ReadOnly Property IsLoaded As Boolean
 
-    Public Property WindowPattern As String = "夜弦之音 ver#.##"
+    Public Property WindowPattern As String = "*"
 
     Const SaveFileName = "应用设置.xml"
 

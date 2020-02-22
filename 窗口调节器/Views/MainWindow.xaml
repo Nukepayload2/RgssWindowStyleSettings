@@ -99,6 +99,7 @@
                         <Expander x:Name="ExpAdvancedSettings" Header="进阶设置" Margin="4">
                             <StackPanel Margin="0,4">
                                 <TextBlock FontSize="16">游戏窗口名称格式</TextBlock>
+                                <TextBlock TextWrapping="Wrap">用于区分同时运行的多个游戏，如果不知道该填什么就写 *</TextBlock>
                                 <TextBox x:Name="TxtWindowNameFormat" Margin="2" FontSize="14">夜弦之音 ver#.##</TextBox>
                                 <TextBlock FontWeight="Bold">格式说明</TextBlock>
                                 <TextBlock TextWrapping="Wrap">* 任意数量字符<LineBreak/>
