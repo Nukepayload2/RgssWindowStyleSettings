@@ -8,12 +8,19 @@
         BorderBrush="DodgerBlue" BorderThickness="1" AllowsTransparency="True" WindowStyle="None"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
         MinHeight="320" MinWidth="300"
+        xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         Title="关于 RGSS 窗口调节器" Height="350" Width="350">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Nukepayload2.UI.Win32;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
+                <Setter Property="Background" Value="#3F7F7F7F"/>
+                <Setter Property="fw:RevealElement.MouseOverBackground" Value="#7FBFBFBF"/>
+                <Setter Property="fw:RevealElement.PressTintBrush" Value="#FFCFCFCF"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -28,34 +35,24 @@
                 <Button x:Name="BtnClose" Focusable="False" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1" x:Name="ClientArea">
+        <Grid Grid.Row="1" x:Name="ClientArea"
+              fw:PointerTracker.Enabled="True">
             <StackPanel Margin="8">
                 <TextBlock Margin="4" x:Name="TblDescription" TextWrapping="Wrap"></TextBlock>
                 <TextBlock Margin="4">发行版托管在 Gitee 上</TextBlock>
-                <local:FluentControlChrome HorizontalAlignment="Left" Margin="4">
-                    <Button x:Name="BtnViewReleases"
-                            Background="#3F7F7F7F" BorderThickness="0"
-                            Padding="18,4">发行版...</Button>
-                </local:FluentControlChrome>
+                <Button x:Name="BtnViewReleases"
+                        HorizontalAlignment="Left" Margin="4"
+                        Padding="18,4">发行版...</Button>
                 <TextBlock Margin="4">源代码托管在 GitHub 上</TextBlock>
-                <local:FluentControlChrome HorizontalAlignment="Left" Margin="4">
-                    <Button x:Name="BtnViewSource"
-                            Background="#3F7F7F7F" BorderThickness="0"
-                            Padding="18,4">源代码...</Button>
-                </local:FluentControlChrome>
+                <Button x:Name="BtnViewSource" HorizontalAlignment="Left" Margin="4"
+                        Padding="18,4">源代码...</Button>
                 <TextBlock Margin="4" TextWrapping="Wrap">如果需要报告问题，请点下面的按钮报告到 Gitee 上</TextBlock>
-                <local:FluentControlChrome HorizontalAlignment="Left" Margin="4">
-                    <Button x:Name="BtnSubmitIssues"
-                            Background="#3F7F7F7F" BorderThickness="0"
-                            Padding="18,4">报告问题...</Button>
-                </local:FluentControlChrome>
+                <Button x:Name="BtnSubmitIssues" HorizontalAlignment="Left" Margin="4"
+                        Padding="18,4">报告问题...</Button>
             </StackPanel>
-            <local:FluentControlChrome Margin="0,8,24,16" 
-                                       HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <Button x:Name="BtnOK" IsDefault="True"
-                            Background="#3F7F7F7F" BorderThickness="0"
-                            Padding="32,8">确定</Button>
-            </local:FluentControlChrome>
+            <Button x:Name="BtnOK" IsDefault="True"
+                    Padding="32,8" Margin="0,8,24,16" 
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom">确定</Button>
         </Grid>
     </Grid>
 </ext:BorderlessWindow>

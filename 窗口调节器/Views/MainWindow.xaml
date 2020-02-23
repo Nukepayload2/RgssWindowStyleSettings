@@ -7,25 +7,26 @@
         mc:Ignorable="d"  MinWidth="400" MinHeight="350" 
         UseLayoutRounding="True" AngleWidth="12" ResizeThickness="4"
         BorderBrush="DodgerBlue" BorderThickness="1" AllowsTransparency="True" WindowStyle="None"
+        xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
         Title="RGSS 窗口调节器" Height="550" Width="400">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Nukepayload2.UI.Win32;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <DropShadowEffect x:Key="FluentShadowEffect" ShadowDepth="0" BlurRadius="10" Opacity="0.6" RenderingBias="Performance"/>
             <Style TargetType="TextBlock">
                 <Setter Property="Margin" Value="2"/>
             </Style>
             <Style TargetType="local:ToggleSwitch">
                 <Setter Property="Margin" Value="8"/>
             </Style>
-            <Style TargetType="Button">
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                <Setter Property="Margin" Value="0"/>
+            <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
                 <Setter Property="Padding" Value="32,8"/>
-                <Setter Property="BorderBrush" Value="DarkGray"/>
+                <Setter Property="Background" Value="#3F7F7F7F"/>
+                <Setter Property="fw:RevealElement.MouseOverBackground" Value="#7FBFBFBF"/>
+                <Setter Property="fw:RevealElement.PressTintBrush" Value="#FFCFCFCF"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -39,7 +40,7 @@
             <TextBlock Margin="8" IsHitTestVisible="False" Text="{Binding ElementName=ThisWindow, Path=Title}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
                 <Button x:Name="BtnAbout" VerticalAlignment="Top"
-                    Background="#3F7F7F7F" BorderThickness="0"
+                    BorderThickness="0" fw:RevealElement.MouseOverBackground="LightGray"
                     Padding="18,4" Margin="0,0,4,0">关于</Button>
                 <Button x:Name="BtnMinimize" Focusable="False" Style="{StaticResource MinimizeButtonStyle}" ToolTip="最小化"></Button>
                 <Button x:Name="BtnClose" Focusable="False" Style="{StaticResource CloseButtonStyle}" ToolTip="关闭"/>
@@ -47,7 +48,7 @@
         </Grid>
         <Border Grid.Row="1" x:Name="ClientArea">
             <ScrollViewer x:Name="ContentScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="6">
+                <StackPanel Margin="6" fw:PointerTracker.Enabled="True">
                     <local:FluentControlChrome>
                         <Expander x:Name="ExpBasicSettings" Header="游戏窗口设置" Margin="4">
                             <StackPanel>
@@ -60,12 +61,8 @@
                                 <TextBlock x:Name="TblStatus"></TextBlock>
                                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                             Orientation="Horizontal" Margin="16,12">
-                                    <local:FluentControlChrome Margin="8">
-                                        <Button x:Name="BtnResizable">应用</Button>
-                                    </local:FluentControlChrome>
-                                    <local:FluentControlChrome Margin="8">
-                                        <Button x:Name="BtnDetect">检测</Button>
-                                    </local:FluentControlChrome>
+                                    <Button x:Name="BtnResizable" Margin="8">应用</Button>
+                                    <Button x:Name="BtnDetect" Margin="8">检测</Button>
                                 </StackPanel>
                             </StackPanel>
                         </Expander>
@@ -89,9 +86,7 @@
                                     <local:ToggleSwitch x:Name="ChkAutoDash">映射 WASD 键时自动跑步</local:ToggleSwitch>
                                 </local:FluentControlChrome>
                                 <TextBlock>映射触摸或鼠标输入</TextBlock>
-                                <local:FluentControlChrome HorizontalAlignment="Left" Margin="2">
-                                    <Button x:Name="BtnOpenScreenKeyboard">打开屏幕键盘</Button>
-                                </local:FluentControlChrome>
+                                <Button x:Name="BtnOpenScreenKeyboard" HorizontalAlignment="Left" Margin="2">打开屏幕键盘</Button>
                             </StackPanel>
                         </Expander>
                     </local:FluentControlChrome>
@@ -108,9 +103,7 @@
                                     [字符列表] 字符列表中的任意一个字符。使用连字符（–）来分隔范围的下限和上限，例如[A-Z]。<LineBreak/>
                                     [!字符列表] 不在字符列表中的任意一个字符
                                 </TextBlock>
-                                <local:FluentControlChrome Margin="8" HorizontalAlignment="Right">
-                                    <Button x:Name="BtnHelpTitleFormat">查看此功能的在线帮助</Button>
-                                </local:FluentControlChrome>
+                                <Button x:Name="BtnHelpTitleFormat" Margin="8" HorizontalAlignment="Right">查看此功能的在线帮助</Button>
                             </StackPanel>
                         </Expander>
                     </local:FluentControlChrome>
