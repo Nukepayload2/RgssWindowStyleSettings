@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports Newtonsoft.Json.Linq
 Imports Nukepayload2.UI.Win32
 
 Public Class AboutWindow
@@ -11,13 +12,40 @@ Public Class AboutWindow
         Process.Start("explorer", "https://gitee.com/nukepayload2/RgssWindowStyleMgrDocs/releases")
     End Sub
 
-    Private Sub AboutWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Async Sub AboutWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Dim version = GetType(MainWindow).Assembly.GetCustomAttribute(Of AssemblyFileVersionAttribute)?.Version
         TblDescription.Text = $"版本: {version}
 作者: Nukepayload2
 禁止用于商业用途。如发此软件被贩卖，请举报店铺。"
         Beep()
+        TblLatestStable.Text = Await TryGetLatestStableAsync()
     End Sub
+
+    Private Shared s_cachedVersion As String
+
+    Private Async Function TryGetLatestStableAsync() As Task(Of String)
+        If s_cachedVersion IsNot Nothing Then
+            Return s_cachedVersion
+        End If
+
+        Const ErrFailedToGetVersion = "获取失败"
+        Try
+            Dim wc As New System.Net.Http.HttpClient
+            Dim result = Await wc.GetAsync("http://nukepayload2.gitee.io/rgsswindowstylemgrdocs/api/v1/version-info")
+            If result.IsSuccessStatusCode Then
+                Dim versionJson = Await result.Content.ReadAsStringAsync
+                Dim verInfo = JObject.Parse(versionJson)
+                Dim latestStable = CType(verInfo("latest-stable"), JValue).Value
+                s_cachedVersion = latestStable
+                Return latestStable
+            Else
+                s_cachedVersion = ErrFailedToGetVersion
+            End If
+        Catch ex As Exception
+            s_cachedVersion = ErrFailedToGetVersion
+        End Try
+        Return s_cachedVersion
+    End Function
 
     Private Sub MainWindow_SourceInitialized(sender As Object, e As EventArgs) Handles Me.SourceInitialized
         Dim windowCompositionFactory As New WindowCompositionFactory

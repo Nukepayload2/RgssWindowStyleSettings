@@ -1,6 +1,9 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Windows.Interop
+Imports System.Windows.Media.Animation
+Imports System.Windows.Threading
 Imports Nukepayload2.Diagnostics.Preview
+Imports Nukepayload2.UI.Win32
 
 Public Class ScreenKeyboardWindow
 
@@ -175,4 +178,65 @@ Public Class ScreenKeyboardWindow
         SendKey(key, InjectedInputKeyOptions.KeyUp)
     End Sub
 
+    Private Async Sub BtnClose_Click(sender As Object, e As RoutedEventArgs) Handles BtnClose.Click
+        BtnClose.IsHitTestVisible = False
+        Const AnimTime = 200
+        Dim entranceAnim As New DoubleAnimation With {
+            .From = 0, .[To] = ActualHeight,
+            .Duration = TimeSpan.FromMilliseconds(AnimTime),
+            .EasingFunction = New CubicEase With {
+                .EasingMode = EasingMode.EaseIn
+            }
+        }
+        EntranceTransform.BeginAnimation(TranslateTransform.YProperty, entranceAnim)
+        Await Task.Delay(AnimTime)
+        Dim mainWnd = Application.Current.MainWindow
+        If mainWnd Is Nothing Then
+            mainWnd = New MainWindow
+            Application.Current.MainWindow = mainWnd
+        End If
+        mainWnd.Show()
+        Close()
+    End Sub
+
+    WithEvents DockTimer As New DispatcherTimer With {.Interval = TimeSpan.FromSeconds(2)}
+
+    Private Async Sub ScreenKeyboardWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        DockTimer_Tick()
+        Const AnimTime = 200
+        Dim entranceAnim As New DoubleAnimation With {
+            .From = ActualHeight, .[To] = 0,
+            .Duration = TimeSpan.FromMilliseconds(AnimTime),
+            .EasingFunction = New CubicEase With {
+                .EasingMode = EasingMode.EaseOut
+            }
+        }
+        EntranceTransform.BeginAnimation(TranslateTransform.YProperty, entranceAnim)
+        Await Task.Delay(AnimTime)
+        DockTimer.Start()
+    End Sub
+
+    Private Sub ScreenKeyboardWindow_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        DockTimer.Stop()
+    End Sub
+
+    Private Sub DockTimer_Tick() Handles DockTimer.Tick
+        Dim curWindow = New WindowInteropHelper(Me).Handle
+        Dim scr = Forms.Screen.FromHandle(curWindow)
+        With scr.WorkingArea
+            Dim curHeight = ActualHeight
+            Dim dpiHlp As New PerMonitorDpiAwareHelper
+            Dim dpi = dpiHlp.GetWindowDpi(curWindow)
+            If dpi IsNot Nothing Then
+                Dim dpiScale = dpi.Value.Y / 96
+                curHeight *= dpiScale
+            End If
+            SetWindowPos(curWindow, IntPtr.Zero,
+                         .Left,
+                         .Top + .Height - curHeight,
+                         .Width,
+                         curHeight,
+                         SWP_NOZORDER Or SWP_NOOWNERZORDER Or SWP_NOACTIVATE)
+        End With
+    End Sub
 End Class

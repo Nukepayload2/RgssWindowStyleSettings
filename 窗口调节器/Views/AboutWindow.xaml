@@ -7,7 +7,7 @@
         mc:Ignorable="d" UseLayoutRounding="True" AngleWidth="12" ResizeThickness="4"
         BorderBrush="DodgerBlue" BorderThickness="1" AllowsTransparency="True" WindowStyle="None"
         xmlns:ext="clr-namespace:Nukepayload2.UI.Xaml;assembly=Nukepayload2.UI.Win32"
-        MinHeight="320" MinWidth="300"
+        MinHeight="350" MinWidth="300"
         xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         Title="关于 RGSS 窗口调节器" Height="350" Width="350">
     <Window.Resources>
@@ -39,7 +39,8 @@
               fw:PointerTracker.Enabled="True">
             <StackPanel Margin="8">
                 <TextBlock Margin="4" x:Name="TblDescription" TextWrapping="Wrap"></TextBlock>
-                <TextBlock Margin="4">发行版托管在 Gitee 上</TextBlock>
+                <TextBlock Margin="4" TextWrapping="Wrap">发行版托管在 Gitee 上, 最新稳定版本: 
+                    <Run x:Name="TblLatestStable" Text="查询中..."/></TextBlock>
                 <Button x:Name="BtnViewReleases"
                         HorizontalAlignment="Left" Margin="4"
                         Padding="18,4">发行版...</Button>

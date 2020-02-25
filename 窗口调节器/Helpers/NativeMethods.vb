@@ -59,4 +59,20 @@ Module NativeMethods
         <MarshalAs(UnmanagedType.LPArray, ArraySubType:=UnmanagedType.Struct, SizeParamIndex:=0)>
         pInputs As INPUT(),
         cbInput As Integer) As Integer
+
+    Declare Function MonitorFromWindow Lib "user32" (hWnd As IntPtr, flags As Integer) As IntPtr
+    Declare Unicode Function GetMonitorInfo Lib "user32.dll" Alias "GetMonitorInfoW" (
+        hMonitor As IntPtr,
+        ByRef lpmi As MonitorInfoEx
+    ) As <MarshalAs(UnmanagedType.Bool)> Boolean
+
+    Declare Function SetWindowPos Lib "user32.dll" (
+        hWnd As IntPtr,
+        hWndInsertAfter As IntPtr,
+        X As Integer,
+        Y As Integer,
+        cx As Integer,
+        cy As Integer,
+        uFlags As Integer) As Boolean
+
 End Module
