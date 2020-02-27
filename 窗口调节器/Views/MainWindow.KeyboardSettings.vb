@@ -151,6 +151,9 @@ Partial Class MainWindow
     End Sub
 
     Private Sub BtnOpenScreenKeyboard_Click(sender As Object, e As RoutedEventArgs) Handles BtnOpenScreenKeyboard.Click
-        Application.ScreenKeyboardWindow.Show()
+        Dim screenKeyboardWindow = Application.ScreenKeyboardWindow
+        screenKeyboardWindow.Owner = Me
+        screenKeyboardWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner
+        screenKeyboardWindow.Show()
     End Sub
 End Class

@@ -49,11 +49,12 @@
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="138"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel>
+            <local:Joystick x:Name="LeftJoystick"/>
+            <StackPanel Visibility="Collapsed">
                 <local:FluentControlChrome x:Name="BtnPressUp" Background="Transparent" HorizontalAlignment="Center">
                     <Grid>
                         <Ellipse Fill="LightGray"/>
