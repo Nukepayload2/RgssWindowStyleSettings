@@ -16,35 +16,46 @@
         End Set
     End Property
 
-    Private Function GetJoystickDirection(pt As Point) As JoystickDirection
+    Private Function PushJoystick(pt As Point) As JoystickDirection
+        Const MaxLength = 50
         Const HalfSize = 40
         Const ThresholdSquared = 16 ^ 2
-        Dim center As New Vector(pt.X - HalfSize, pt.Y - HalfSize)
-        Dim lengthSquared = center.LengthSquared
+        Dim direction As New Vector(pt.X - HalfSize, pt.Y - HalfSize)
+
+        Dim lengthSquared = direction.LengthSquared
+        Dim length = Math.Sqrt(lengthSquared)
+        If length > MaxLength Then
+            Dim rate = length / MaxLength
+            direction = New Vector(direction.X / rate, direction.Y / rate)
+        End If
+        JoystickTransform.X = direction.X
+        JoystickTransform.Y = direction.Y
+
         If lengthSquared > ThresholdSquared Then
-            If center.X > 0 Then
-                If center.Y > 0 Then
-                    If center.X > center.Y Then
+
+            If direction.X > 0 Then
+                If direction.Y > 0 Then
+                    If direction.X > direction.Y Then
                         Return JoystickDirection.Right
                     Else
                         Return JoystickDirection.Down
                     End If
                 Else
-                    If center.X > -center.Y Then
+                    If direction.X > -direction.Y Then
                         Return JoystickDirection.Right
                     Else
                         Return JoystickDirection.Up
                     End If
                 End If
             Else
-                If center.Y > 0 Then
-                    If -center.X > center.Y Then
+                If direction.Y > 0 Then
+                    If -direction.X > direction.Y Then
                         Return JoystickDirection.Left
                     Else
                         Return JoystickDirection.Down
                     End If
                 Else
-                    If -center.X > -center.Y Then
+                    If -direction.X > -direction.Y Then
                         Return JoystickDirection.Left
                     Else
                         Return JoystickDirection.Up
@@ -58,18 +69,21 @@
 
     Private Sub Joystick_TouchDown(sender As Object, e As TouchEventArgs) Handles Me.TouchDown
         CaptureTouch(e.TouchDevice)
-        Dim pt = e.GetTouchPoint(JoystickHat).Position
-        Direction = GetJoystickDirection(pt)
+        Dim pt = e.GetTouchPoint(JoystickHatBack).Position
+        Direction = PushJoystick(pt)
     End Sub
 
     Private Sub Joystick_TouchMove(sender As Object, e As TouchEventArgs) Handles Me.TouchMove
-        Dim pt = e.GetTouchPoint(JoystickHat).Position
-        Direction = GetJoystickDirection(pt)
+        Dim pt = e.GetTouchPoint(JoystickHatBack).Position
+        Direction = PushJoystick(pt)
     End Sub
 
     Private Sub Joystick_TouchUp(sender As Object, e As TouchEventArgs) Handles Me.TouchUp
         ReleaseTouchCapture(e.TouchDevice)
         Direction = JoystickDirection.None
+
+        JoystickTransform.X = 0
+        JoystickTransform.Y = 0
     End Sub
 
     Private _mousePressed As Boolean
@@ -79,17 +93,17 @@
         End If
 
         _mousePressed = True
-        Dim pt = e.GetPosition(JoystickHat)
+        Dim pt = e.GetPosition(JoystickHatBack)
         CaptureMouse()
-        Direction = GetJoystickDirection(pt)
+        Direction = PushJoystick(pt)
     End Sub
 
     Private Sub Joystick_PreviewMouseMove(sender As Object, e As MouseEventArgs) Handles Me.PreviewMouseMove
-        If Not _mousePressed Then
+        If Not _mousePressed OrElse Not e.LeftButton = MouseButtonState.Pressed Then
             Return
         End If
-        Dim pt = e.GetPosition(JoystickHat)
-        Direction = GetJoystickDirection(pt)
+        Dim pt = e.GetPosition(JoystickHatBack)
+        Direction = PushJoystick(pt)
     End Sub
 
     Private Sub Joystick_PreviewMouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonUp
@@ -99,6 +113,8 @@
         _mousePressed = False
         ReleaseMouseCapture()
         Direction = JoystickDirection.None
+        JoystickTransform.X = 0
+        JoystickTransform.Y = 0
     End Sub
 End Class
 

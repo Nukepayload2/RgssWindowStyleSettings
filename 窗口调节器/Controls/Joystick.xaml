@@ -8,7 +8,8 @@
              d:DesignHeight="128" d:DesignWidth="128">
     <Grid>
         <Ellipse Fill="LightGray" Width="100" Height="100"/>
-        <Ellipse x:Name="JoystickHat" Fill="Gray" Width="80" Height="80" RenderTransformOrigin="0.5,0.5">
+        <Ellipse x:Name="JoystickHatBack" Fill="Black" Width="80" Height="80"/>
+        <Ellipse x:Name="JoystickHat" Fill="Gray" Width="80" Height="80">
             <Ellipse.RenderTransform>
                 <TranslateTransform x:Name="JoystickTransform" />
             </Ellipse.RenderTransform>
