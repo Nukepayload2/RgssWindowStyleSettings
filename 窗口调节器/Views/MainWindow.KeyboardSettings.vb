@@ -155,5 +155,6 @@ Partial Class MainWindow
         screenKeyboardWindow.Owner = Me
         screenKeyboardWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner
         screenKeyboardWindow.Show()
+        screenKeyboardWindow.Owner = Nothing
     End Sub
 End Class

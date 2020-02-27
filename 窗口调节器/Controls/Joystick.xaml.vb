@@ -9,8 +9,9 @@
         End Get
         Private Set(value As JoystickDirection)
             If _Direction <> value Then
+                Dim old = _Direction
                 _Direction = value
-                RaiseEvent JoystickDirectionChanged(_Direction, value)
+                RaiseEvent JoystickDirectionChanged(old, value)
             End If
         End Set
     End Property

@@ -239,4 +239,45 @@ Public Class ScreenKeyboardWindow
                          SWP_NOZORDER Or SWP_NOOWNERZORDER Or SWP_NOACTIVATE)
         End With
     End Sub
+
+    Private Sub LeftJoystick_JoystickDirectionChanged(oldDirection As JoystickDirection, newDirection As JoystickDirection) Handles LeftJoystick.JoystickDirectionChanged
+        Select Case oldDirection
+            Case JoystickDirection.Left
+                SendKeyUp(VirtualKey.Left)
+                Debug.WriteLine("左键放开")
+            Case JoystickDirection.Up
+                SendKeyUp(VirtualKey.Up)
+                Debug.WriteLine("上键放开")
+            Case JoystickDirection.Right
+                SendKeyUp(VirtualKey.Right)
+                Debug.WriteLine("右键放开")
+            Case JoystickDirection.Down
+                SendKeyUp(VirtualKey.Down)
+                Debug.WriteLine("下键放开")
+        End Select
+        Select Case newDirection
+            Case JoystickDirection.Left
+                SendKeyDown(VirtualKey.Left)
+                Debug.WriteLine("左键按下")
+            Case JoystickDirection.Up
+                SendKeyDown(VirtualKey.Up)
+                Debug.WriteLine("上键按下")
+            Case JoystickDirection.Right
+                SendKeyDown(VirtualKey.Right)
+                Debug.WriteLine("右键按下")
+            Case JoystickDirection.Down
+                SendKeyDown(VirtualKey.Down)
+                Debug.WriteLine("下键按下")
+        End Select
+
+        If newDirection <> JoystickDirection.None Then
+            _directionPressed = 1
+            If _xButtonPressed AndAlso Not _xButtonAsShift Then
+                _xButtonAsShift = True
+                SendKeyDown(VirtualKey.LeftShift)
+            End If
+        Else
+            _directionPressed = 0
+        End If
+    End Sub
 End Class
