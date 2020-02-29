@@ -29,10 +29,9 @@ Partial Class MainWindow
         (Key.K, VirtualKey.Z, False, False)
     }
 
-    Private _hasMoveKeyDown As Boolean
-
     Private ReadOnly _downKeys As New List(Of VirtualKey)
     Private ReadOnly _upKeys As New List(Of VirtualKey)
+    Private ReadOnly _upKeysLater As New List(Of VirtualKey)
 
     Private Sub MapWasdTimer_Tick(sender As Object, e As EventArgs) Handles MapWasdTimer.Tick
         Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
@@ -49,8 +48,11 @@ Partial Class MainWindow
         Dim upKeys = _upKeys
         downKeys.Clear()
         upKeys.Clear()
-        MapKeys(downKeys, upKeys)
-        BindShiftToMoveKeys(downKeys, upKeys)
+        upKeys.AddRange(_upKeysLater)
+        _upKeysLater.Clear()
+        Dim upKeysLater = _upKeysLater
+        MapKeys(downKeys, upKeys, upKeysLater)
+        BindShiftToMoveKeys(downKeys, upKeys, upKeysLater)
         SendKeyboardStateChanges(downKeys, upKeys)
     End Sub
 
@@ -68,6 +70,7 @@ Partial Class MainWindow
                 .type = INPUT_KEYBOARD,
                 .u = New InputUnion With {.ki = keyInput}
             }
+            Debug.WriteLine("按下 " & keyInput.VirtualKey.ToString)
         Next
         For i = downKeys.Count To inputs.Length - 1
             Dim keyInput As New InjectedInputKeyboardInfo With {
@@ -78,31 +81,42 @@ Partial Class MainWindow
                 .type = INPUT_KEYBOARD,
                 .u = New InputUnion With {.ki = keyInput}
             }
+            Debug.WriteLine("放开 " & keyInput.VirtualKey.ToString)
         Next
         SendInput(inputs.Length, inputs, Marshal.SizeOf(Of INPUT))
     End Sub
 
-    Private Sub MapKeys(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey))
-        Dim autoDash = ChkAutoDash.IsChecked.GetValueOrDefault
-
+    Private Sub MapKeys(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey), upKeysLater As List(Of VirtualKey))
         For i = 0 To _keyMapping.Length - 1
             Dim keyMp = _keyMapping(i)
             With keyMp
-                If Keyboard.IsKeyDown(.mapFrom) Then
-                    If .isDown Then
-                        ' 按键状态一致
+                If .isMove Then
+                    ' 方向键按下立即映射
+                    If Keyboard.IsKeyDown(.mapFrom) Then
+                        If .isDown Then
+                            ' 按键状态一致
+                        Else
+                            downKeys.Add(.mapTo)
+                            .isDown = True
+                        End If
                     Else
-                        downKeys.Add(.mapTo)
-                        Debug.WriteLine("按下 " & .mapTo.ToString)
-                        .isDown = True
+                        If .isDown Then
+                            upKeys.Add(.mapTo)
+                            .isDown = False
+                        Else
+                            ' 按键状态一致。
+                        End If
                     End If
                 Else
-                    If .isDown Then
-                        upKeys.Add(.mapTo)
-                        Debug.WriteLine("放开 " & .mapTo.ToString)
-                        .isDown = False
+                    ' 功能键放开的时候映射按下和放开
+                    If Keyboard.IsKeyDown(.mapFrom) Then
+                        .isDown = True
                     Else
-                        ' 按键状态一致。
+                        If .isDown Then
+                            downKeys.Add(.mapTo)
+                            upKeysLater.Add(.mapTo)
+                            .isDown = False
+                        End If
                     End If
                 End If
             End With
@@ -110,38 +124,38 @@ Partial Class MainWindow
         Next
     End Sub
 
-    Private Sub BindShiftToMoveKeys(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey))
-        Dim autoDash = ChkAutoDash.IsChecked.GetValueOrDefault
-        If Not autoDash Then
-            Return
-        End If
+    Private _shiftPressed As Boolean
 
-        Dim curShiftDown = False
+    Private Sub BindShiftToMoveKeys(downKeys As List(Of VirtualKey), upKeys As List(Of VirtualKey), upKeysLater As List(Of VirtualKey))
+        Dim isJDown = Keyboard.IsKeyDown(Key.J)
+        Dim isMoveDown = False
         For i = 0 To _keyMapping.Length - 1
             With _keyMapping(i)
                 If .isDown AndAlso .isMove Then
-                    curShiftDown = True
+                    isMoveDown = True
                     Exit For
                 End If
             End With
         Next
-
-        If curShiftDown Then
-            If _hasMoveKeyDown Then
-                ' 不变。
-            Else
-                downKeys.Add(VirtualKey.LeftShift)
-                Debug.WriteLine("按下 Shift")
-                _hasMoveKeyDown = True
-            End If
-        Else
-            If _hasMoveKeyDown Then
-                upKeys.Add(VirtualKey.LeftShift)
-                Debug.WriteLine("松开 Shift")
-                _hasMoveKeyDown = False
-            Else
-                ' 不变。
-            End If
+        Dim isJAndMoveDown = isJDown AndAlso isMoveDown
+        If isJAndMoveDown AndAlso Not _shiftPressed Then
+            downKeys.Add(VirtualKey.LeftShift)
+            _shiftPressed = True
+        End If
+        If Not isJDown AndAlso _shiftPressed Then
+            downKeys.Remove(VirtualKey.X)
+            upKeys.Remove(VirtualKey.X)
+            upKeysLater.Remove(VirtualKey.X)
+            upKeys.Add(VirtualKey.LeftShift)
+            _shiftPressed = False
+            Debug.WriteLine("屏蔽 X 键")
+        End If
+        If isMoveDown Then
+            ' 按下方向的时候屏蔽 X，因为已经替换成 Shift 了。
+            downKeys.Remove(VirtualKey.X)
+            upKeys.Remove(VirtualKey.X)
+            upKeysLater.Remove(VirtualKey.X)
+            Debug.WriteLine("屏蔽 X 键")
         End If
     End Sub
 

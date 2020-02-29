@@ -80,10 +80,7 @@
                                     此信息在退出此软件后消失，不会发送给任何其它地方，也不会记录到本地文件。
                                 </TextBlock>
                                 <local:FluentControlChrome Margin="0,8">
-                                    <local:ToggleSwitch x:Name="ChkUseWasd">将 WASDJK 映射到 ↑→↓←XZ</local:ToggleSwitch>
-                                </local:FluentControlChrome>
-                                <local:FluentControlChrome Margin="0,8">
-                                    <local:ToggleSwitch x:Name="ChkAutoDash">映射 WASD 键时自动跑步</local:ToggleSwitch>
+                                    <local:ToggleSwitch x:Name="ChkUseWasd">将 WASDJK 映射到 ↑→↓←XZ, J+方向 代替 Shift+方向</local:ToggleSwitch>
                                 </local:FluentControlChrome>
                                 <TextBlock>映射触摸或鼠标输入</TextBlock>
                                 <Button x:Name="BtnOpenScreenKeyboard" HorizontalAlignment="Left" Margin="2">打开屏幕键盘</Button>

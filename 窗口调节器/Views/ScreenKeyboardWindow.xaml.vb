@@ -160,10 +160,12 @@ Public Class ScreenKeyboardWindow
     End Sub
 
     Private Async Function SimulateKeyPressAsync(curKey As VirtualKey) As Task
-        Dim gameWnd = RgssSingleWindowManager.GetGameWindow()
+        Dim gameWnd = RgssSingleWindowManager.GetGameWindow(True)
         If gameWnd Is Nothing Then
+            TblErr.Text = "找不到游戏窗口，不能发送按键。"
             Return
         End If
+        TblErr.Text = String.Empty
         If Not gameWnd.IsForeground Then
             gameWnd.Activate()
             Debug.WriteLine("Game window activated")
@@ -176,11 +178,12 @@ Public Class ScreenKeyboardWindow
 
     Private Sub SendKey(key As VirtualKey, options As InjectedInputKeyOptions, activateGameWindow As Boolean)
         If activateGameWindow Then
-            Dim gameWnd = RgssSingleWindowManager.GetGameWindow(
-                silent:=options <> InjectedInputKeyOptions.None)
+            Dim gameWnd = RgssSingleWindowManager.GetGameWindow(True)
             If gameWnd Is Nothing Then
+                TblErr.Text = "找不到游戏窗口，不能发送按键。"
                 Return
             End If
+            TblErr.Text = String.Empty
             If Not gameWnd.IsForeground Then
                 gameWnd.Activate()
                 Debug.WriteLine("Game window activated")

@@ -18,6 +18,6 @@
         End If
 
         s_gameWindow = Nothing
-        Return GetGameWindow()
+        Return GetGameWindow(silent)
     End Function
 End Class

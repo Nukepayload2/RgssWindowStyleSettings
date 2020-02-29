@@ -80,13 +80,15 @@
                     </Grid>
                 </local:FluentControlChrome>
             </StackPanel>
-            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Foreground="Gray"
-                   VerticalAlignment="Center" TextWrapping="Wrap" Margin="16,8">
-            <Run FontSize="16">操作</Run><LineBreak/>
-            方向键：对应键盘的方向键。跟 x 键一起按的话视为方向键与 Shift 键一起按。<LineBreak/>
-            x 键：如果单独按，对应键盘的 x 键。如果跟方向键一起按，代表 Shift 键。<LineBreak/>
-            z 键：对应键盘的 z 键。
-            </TextBlock>
+            <Grid Grid.Column="1" HorizontalAlignment="Center" Margin="16,8">
+                <TextBlock x:Name="TblErr" VerticalAlignment="Top" Foreground="Red"/>
+                <TextBlock Foreground="Gray" VerticalAlignment="Center" TextWrapping="Wrap">
+                <Run FontSize="16">操作</Run><LineBreak/>
+                方向键：对应键盘的方向键。跟 x 键一起按的话视为方向键与 Shift 键一起按。<LineBreak/>
+                x 键：如果单独按，对应键盘的 x 键。如果跟方向键一起按，代表 Shift 键。<LineBreak/>
+                z 键：对应键盘的 z 键。
+                </TextBlock>
+            </Grid>
             <StackPanel Grid.Column="1" HorizontalAlignment="Left"
                         VerticalAlignment="Bottom" Orientation="Horizontal">
                 <Button x:Name="BtnCallSnippetTool">截图</Button>
