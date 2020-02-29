@@ -47,6 +47,32 @@ Public Class ScreenKeyboardWindow
         Await SimulateKeyPressAsync(VirtualKey.Z)
     End Sub
 
+    Private _aButtonPressed As Boolean
+    Private Sub BtnPressA_MouseLeftButtonDown() Handles BtnPressA.PreviewMouseLeftButtonDown, BtnPressA.PreviewTouchDown, BtnPressA.TouchEnter
+        _aButtonPressed = True
+    End Sub
+
+    Private Async Sub BtnPressA_MouseLeftButtonUp() Handles BtnPressA.PreviewMouseLeftButtonUp, BtnPressA.MouseLeave, BtnPressA.PreviewTouchUp, BtnPressA.TouchLeave
+        If Not _aButtonPressed Then
+            Return
+        End If
+        _aButtonPressed = False
+        Await SimulateKeyPressAsync(VirtualKey.A)
+    End Sub
+
+    Private _sButtonPressed As Boolean
+    Private Sub BtnPressS_MouseLeftButtonDown() Handles BtnPressS.PreviewMouseLeftButtonDown, BtnPressS.PreviewTouchDown, BtnPressS.TouchEnter
+        _sButtonPressed = True
+    End Sub
+
+    Private Async Sub BtnPressS_MouseLeftButtonUp() Handles BtnPressS.PreviewMouseLeftButtonUp, BtnPressS.MouseLeave, BtnPressS.PreviewTouchUp, BtnPressS.TouchLeave
+        If Not _sButtonPressed Then
+            Return
+        End If
+        _sButtonPressed = False
+        Await SimulateKeyPressAsync(VirtualKey.S)
+    End Sub
+
     Private _directionPressed As Integer
     Private _upPressed As Boolean
     Private Sub BtnPressUp_MouseLeftButtonDown() Handles BtnPressUp.PreviewMouseLeftButtonDown, BtnPressUp.PreviewTouchDown, BtnPressUp.TouchEnter
@@ -148,16 +174,19 @@ Public Class ScreenKeyboardWindow
         Debug.WriteLine("Send key " & curKey.ToString)
     End Function
 
-    Private Sub SendKey(key As VirtualKey, options As InjectedInputKeyOptions)
-        Dim gameWnd = RgssSingleWindowManager.GetGameWindow(
-            silent:=options <> InjectedInputKeyOptions.None)
-        If gameWnd Is Nothing Then
-            Return
+    Private Sub SendKey(key As VirtualKey, options As InjectedInputKeyOptions, activateGameWindow As Boolean)
+        If activateGameWindow Then
+            Dim gameWnd = RgssSingleWindowManager.GetGameWindow(
+                silent:=options <> InjectedInputKeyOptions.None)
+            If gameWnd Is Nothing Then
+                Return
+            End If
+            If Not gameWnd.IsForeground Then
+                gameWnd.Activate()
+                Debug.WriteLine("Game window activated")
+            End If
         End If
-        If Not gameWnd.IsForeground Then
-            gameWnd.Activate()
-            Debug.WriteLine("Game window activated")
-        End If
+
         Dim keyInput As New InjectedInputKeyboardInfo With {
             .VirtualKey = key,
             .KeyOptions = options
@@ -170,12 +199,12 @@ Public Class ScreenKeyboardWindow
         SendInput(inputs.Length, inputs, Marshal.SizeOf(Of INPUT))
     End Sub
 
-    Private Sub SendKeyDown(key As VirtualKey)
-        SendKey(key, InjectedInputKeyOptions.None)
+    Private Sub SendKeyDown(key As VirtualKey, Optional activateGameWindow As Boolean = True)
+        SendKey(key, InjectedInputKeyOptions.None, activateGameWindow)
     End Sub
 
-    Private Sub SendKeyUp(key As VirtualKey)
-        SendKey(key, InjectedInputKeyOptions.KeyUp)
+    Private Sub SendKeyUp(key As VirtualKey, Optional activateGameWindow As Boolean = True)
+        SendKey(key, InjectedInputKeyOptions.KeyUp, activateGameWindow)
     End Sub
 
     Private Async Sub BtnClose_Click(sender As Object, e As RoutedEventArgs) Handles BtnClose.Click
@@ -270,6 +299,26 @@ Public Class ScreenKeyboardWindow
             End If
         Else
             _directionPressed = 0
+        End If
+    End Sub
+
+    Private Async Sub BtnCallSnippetTool_Click(sender As Object, e As RoutedEventArgs) Handles BtnCallSnippetTool.Click
+        If Environment.OSVersion.Version.Major >= 10 Then
+            SendKeyDown(VirtualKey.LeftShift, False)
+            SendKeyDown(VirtualKey.LeftWindows, False)
+            SendKeyDown(VirtualKey.S, False)
+            BtnCallSnippetTool.IsEnabled = False
+            Await Task.Delay(300)
+            SendKeyUp(VirtualKey.LeftShift, False)
+            SendKeyUp(VirtualKey.LeftWindows, False)
+            SendKeyUp(VirtualKey.S, False)
+            BtnCallSnippetTool.IsEnabled = True
+        Else
+            Try
+                Process.Start(Environment.ExpandEnvironmentVariables("""" & "%windir%\system32\SnippingTool.exe" & """"))
+            Catch ex As Exception
+                MsgBox(ex.Message, vbExclamation, "无法启动截图工具")
+            End Try
         End If
     End Sub
 End Class
